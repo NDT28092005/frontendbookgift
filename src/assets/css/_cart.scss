@@ -1,0 +1,298 @@
+// Paste all your SCSS variables here
+ $color-dark: #5D2A42; // Deep burgundy
+ $color-coral: #FB6376; // Vibrant coral
+ $color-peach: #FCB1A6; // Soft peach
+ $color-light-peach: #FFDCCC; // Very light peach
+ $color-cream: #FFF9EC; // Cream white
+
+ $primary-color: $color-dark;
+ $secondary-color: $color-coral;
+ $text-color: #333;
+ $text-color-light: #666;
+ $text-white: #fff;
+ $search-width: 200px;
+ $login-width: 100px;
+ $total-right-width: $search-width+$login-width+20px; // +20px for gaps
+ $button-min-width: 120px;
+ $button-max-width: 150px;
+ $border-radius: 4px;
+ $hover-bg: rgba(251, 99, 118, 0.1);
+ $hover-border: rgba(251, 99, 118, 0.2);
+
+// Accent colors
+ $accent-1: $color-coral; // Main accent
+ $accent-2: $color-peach; // Secondary accent
+ $accent-3: $color-light-peach; // Tertiary accent
+ $surface-1: rgba(255, 220, 204, 0.15); // Light peach glass
+ $surface-2: rgba(255, 220, 204, 0.25);
+ $border-1: rgba(93, 42, 66, 0.2);
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* =======================
+   General Styles
+======================= */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: $color-cream;
+  color: $text-color;
+}
+
+.cart-page {
+  .card {
+    border: 1px solid $border-1;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    background-color: $text-white;
+    margin-bottom: 2rem;
+    overflow: hidden; // To keep child corners rounded
+
+    .card-header {
+      background-color: $primary-color;
+      color: $text-white;
+      font-weight: 600;
+      border-bottom: none;
+    }
+  }
+}
+
+/* =======================
+   Cart Items
+======================= */
+.cart-items-container {
+  .cart-item {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid $border-1;
+    gap: 1.5rem;
+    transition: background-color 0.3s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: $hover-bg;
+    }
+
+    .cart-item-image {
+      flex-shrink: 0;
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: $border-radius;
+      border: 1px solid $border-1;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+      &:hover img {
+        transform: scale(1.05);
+      }
+    }
+
+    .cart-item-info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      h5 {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        color: $text-color;
+        transition: color 0.2s ease;
+        &:hover {
+          color: $secondary-color;
+        }
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+
+        button {
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          border: 1px solid $border-1;
+          background-color: $text-white;
+          color: $primary-color;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover:not(:disabled) {
+            background-color: $primary-color;
+            color: $text-white;
+          }
+
+          &:disabled {
+            background-color: $text-color-light;
+            color: $text-white;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+        }
+
+        span {
+          font-weight: 500;
+          min-width: 20px;
+          text-align: center;
+        }
+      }
+
+      .cart-item-price {
+        margin-top: 0.75rem;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: $primary-color;
+      }
+    }
+
+    .cart-item-remove {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: $text-color-light;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: $secondary-color;
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+
+/* =======================
+   Empty Cart State
+======================= */
+.empty-cart {
+  padding: 3rem 1rem;
+  color: $text-color-light;
+
+  svg {
+    color: $secondary-color;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: $text-white;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    border-radius: $border-radius;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  }
+}
+
+/* =======================
+   Order Summary
+======================= */
+.order-summary {
+  position: sticky;
+  top: 100px; // Adjust based on your header height
+
+  .summary-details {
+    .d-flex {
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      span:first-child {
+        color: $text-color-light;
+      }
+      span:last-child {
+        font-weight: 500;
+      }
+    }
+    hr {
+      border-color: $border-1;
+      margin: 1.5rem 0;
+    }
+    .total {
+      h5 {
+        margin: 0;
+        font-weight: 700;
+        color: $primary-color;
+      }
+    }
+  }
+
+  .btn {
+    background-color: $secondary-color;
+    border-color: $secondary-color;
+    color: $text-white;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: $border-radius;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: darken($secondary-color, 10%);
+      border-color: darken($secondary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    &:disabled {
+      background-color: $text-color-light;
+      border-color: $text-color-light;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* =======================
+   Responsive Design
+======================= */
+@media (max-width: 767px) {
+  .cart-page {
+    .cart-item {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 1rem;
+
+      .cart-item-info {
+        width: 100%;
+      }
+      .cart-item-remove {
+        align-self: flex-end;
+      }
+    }
+    .order-summary {
+      position: static; // Disable sticky on mobile
+    }
+  }
+}
