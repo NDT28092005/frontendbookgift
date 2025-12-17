@@ -20,7 +20,7 @@ const AdminEditUser = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/users/${id}`);
+                const response = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}`);
                 const data = response.data;
 
                 setUser({
@@ -51,7 +51,7 @@ const AdminEditUser = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await axios.put(`http://localhost:8000/api/users/${id}`, {
+            await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}`, {
                 ...user,
                 is_active: user.is_active ? 1 : 0,
             });

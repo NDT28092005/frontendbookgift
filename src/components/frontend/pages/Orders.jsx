@@ -74,7 +74,7 @@ export default function Orders() {
       setLoading(true);
       setError('');
       
-      const response = await axios.get('http://localhost:8000/api/orders', {
+      const response = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders', {
         headers: { Authorization: `Bearer ${token}` },
         params: { per_page: 100 }
       });
@@ -133,7 +133,7 @@ export default function Orders() {
       setShowCancelModal(false);
       
       await axios.post(
-        `http://localhost:8000/api/orders/${orderToCancel}/cancel`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${orderToCancel}/cancel`,
         { reason: cancelReason.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );

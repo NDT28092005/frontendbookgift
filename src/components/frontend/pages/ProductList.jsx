@@ -114,7 +114,7 @@ export default function ProductList() {
       setLoading(true);
       
       // Fetch products
-      const productsRes = await axios.get('http://localhost:8000/api/products');
+      const productsRes = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products');
       setProducts(productsRes.data || []);
       
       // Fetch categories
@@ -162,7 +162,7 @@ export default function ProductList() {
     try {
       setAddingProductId(productId);
       await axios.post(
-        "http://localhost:8000/api/cart/add",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/add",
         { product_id: productId, quantity: 1 },
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/chat/product-chatbot";
+const API_URL = "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/chat/product-chatbot";
 const TOKEN_KEY = "token";
 
 // Helper để lấy token

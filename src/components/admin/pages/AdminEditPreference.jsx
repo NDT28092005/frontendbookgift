@@ -20,7 +20,7 @@ const AdminEditPreference = () => {
         const fetchPref = async () => {
             try {
                 setLoadingData(true);
-                const res = await axios.get(`http://localhost:8000/api/users/${id}/preferences/${prefId}`);
+                const res = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences/${prefId}`);
                 setForm(res.data);
             } catch (error) {
                 console.error('Error loading preference:', error);
@@ -40,7 +40,7 @@ const AdminEditPreference = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            await axios.put(`http://localhost:8000/api/users/${id}/preferences/${prefId}`, form);
+            await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences/${prefId}`, form);
             navigate(`/admin/users/${id}/preferences`);
         } catch (error) {
             console.error('Error updating preference:', error);

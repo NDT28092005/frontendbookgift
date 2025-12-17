@@ -30,7 +30,7 @@ const AdminAddUser = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await axios.post('http://localhost:8000/api/users', user);
+            await axios.post('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users', user);
             alert('Tạo người dùng thành công!');
             navigate('/admin/users');
         } catch (error) {

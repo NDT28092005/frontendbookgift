@@ -14,7 +14,7 @@ const AdminUserAnniversaryForm = () => {
         if (!anniversaryId) return;
         setLoading(true);
         try {
-            const res = await axios.get(`http://localhost:8000/api/users/${id}/anniversaries/${anniversaryId}`);
+            const res = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/anniversaries/${anniversaryId}`);
             setForm({ event_name: res.data.event_name, event_date: res.data.event_date });
         } catch (err) {
             console.error(err);
@@ -35,10 +35,10 @@ const AdminUserAnniversaryForm = () => {
         e.preventDefault();
         try {
             if (anniversaryId) {
-                await axios.put(`http://localhost:8000/api/users/${id}/anniversaries/${anniversaryId}`, form);
+                await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/anniversaries/${anniversaryId}`, form);
                 alert('Anniversary updated successfully!');
             } else {
-                await axios.post(`http://localhost:8000/api/users/${id}/anniversaries`, form);
+                await axios.post(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/anniversaries`, form);
                 alert('Anniversary created successfully!');
             }
             navigate(`/admin/users/${id}/anniversaries`);

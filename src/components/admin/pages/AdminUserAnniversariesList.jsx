@@ -15,8 +15,8 @@ const AdminUserAnniversariesList = () => {
         setLoading(true);
         try {
             const [anniversariesRes, userRes] = await Promise.all([
-                axios.get(`http://localhost:8000/api/users/${id}/anniversaries`),
-                axios.get(`http://localhost:8000/api/users/${id}`)
+                axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/anniversaries`),
+                axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}`)
             ]);
             setAnniversaries(anniversariesRes.data || []);
             setUserInfo(userRes.data);
@@ -35,7 +35,7 @@ const AdminUserAnniversariesList = () => {
     const handleDelete = async (anniversaryId) => {
         if (!window.confirm('Bạn có chắc muốn xóa sự kiện kỷ niệm này?')) return;
         try {
-            await axios.delete(`http://localhost:8000/api/users/${id}/anniversaries/${anniversaryId}`);
+            await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/anniversaries/${anniversaryId}`);
             fetchAnniversaries();
         } catch (err) {
             console.error(err);

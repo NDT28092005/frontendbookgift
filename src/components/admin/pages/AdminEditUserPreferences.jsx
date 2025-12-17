@@ -19,7 +19,7 @@ const AdminEditPreference = () => {
     useEffect(() => {
         const fetchPref = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/users/${id}/preferences/${prefId}`);
+                const res = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences/${prefId}`);
                 setForm({
                     preferred_occasion: res.data.preferred_occasion || '',
                     favorite_category: res.data.favorite_category || '',
@@ -44,7 +44,7 @@ const AdminEditPreference = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await axios.put(`http://localhost:8000/api/users/${id}/preferences/${prefId}`, form);
+            await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences/${prefId}`, form);
             alert('Cập nhật sở thích thành công!');
             navigate(`/admin/users/${id}/preferences`);
         } catch (err) {

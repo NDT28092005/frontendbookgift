@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/products";
+const API_URL = "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products";
 
 export const getProducts = (params = {}) => axios.get(API_URL, { params });
 export const getProduct = (id) => axios.get(`${API_URL}/${id}`);

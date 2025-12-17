@@ -50,7 +50,7 @@ export default function AdminReturnRequests() {
       if (statusFilter) params.status = statusFilter;
       if (typeFilter) params.type = typeFilter;
 
-      const res = await axios.get('http://localhost:8000/api/admin/returns', {
+      const res = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/returns', {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
@@ -68,7 +68,7 @@ export default function AdminReturnRequests() {
 
     try {
       await axios.post(
-        `http://localhost:8000/api/admin/returns/${id}/approve`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/returns/${id}/approve`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -86,7 +86,7 @@ export default function AdminReturnRequests() {
 
     try {
       await axios.post(
-        `http://localhost:8000/api/admin/returns/${id}/reject`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/returns/${id}/reject`,
         { note },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -103,7 +103,7 @@ export default function AdminReturnRequests() {
 
     try {
       await axios.post(
-        `http://localhost:8000/api/admin/returns/${id}/received`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/returns/${id}/received`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -121,7 +121,7 @@ export default function AdminReturnRequests() {
     setProcessing(true);
     try {
       const res = await axios.post(
-        `http://localhost:8000/api/admin/returns/${selectedReturn.id}/refund`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/returns/${selectedReturn.id}/refund`,
         {
           method: refundMethod,
           note: refundNote,

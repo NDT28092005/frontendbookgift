@@ -88,7 +88,7 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:8000/api/products/${id}`);
+        const response = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products/${id}`);
         if (response && response.data) {
           setProduct(response.data);
           // Fetch related products after product is loaded
@@ -120,7 +120,7 @@ export default function ProductDetail() {
         params.occasion_id = currentProduct.occasion_id;
       }
 
-      const response = await axios.get('http://localhost:8000/api/products', { params });
+      const response = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products', { params });
       const allProducts = response.data || [];
       
       // Filter out current product and inactive products, then take 4 products
@@ -139,7 +139,7 @@ export default function ProductDetail() {
     const fetchReviews = async () => {
       try {
         setReviewsLoading(true);
-        const response = await axios.get('http://localhost:8000/api/reviews/');
+        const response = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/');
         // Filter reviews theo product_id và chỉ lấy reviews không bị block
         const allReviews = Array.isArray(response && response.data) ? response.data : [];
         const productReviews = allReviews.filter(
@@ -182,7 +182,7 @@ export default function ProductDetail() {
     try {
       setAddingToCart(true);
       await axios.post(
-        "http://localhost:8000/api/cart/add",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/add",
         { product_id: id, quantity: quantity },
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
@@ -270,7 +270,7 @@ export default function ProductDetail() {
     try {
       setSubmittingReview(true);
       await axios.post(
-        'http://localhost:8000/api/reviews/',
+        'https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/',
         {
           product_id: parseInt(id),
           user_id: user.id,
@@ -281,7 +281,7 @@ export default function ProductDetail() {
       );
       
       // Refresh reviews
-      const response = await axios.get('http://localhost:8000/api/reviews/');
+      const response = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/');
       const allReviews = Array.isArray(response && response.data) ? response.data : [];
       const productReviews = allReviews.filter(
         review => review && review.product_id === parseInt(id) && !review.is_blocked

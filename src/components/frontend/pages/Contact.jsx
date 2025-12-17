@@ -59,7 +59,7 @@ const Contact = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:8000/api/contact',
+        'https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/contact',
         formData,
         { headers }
       );

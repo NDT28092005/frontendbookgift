@@ -15,12 +15,12 @@ export default function VerifyEmail() {
       return;
     }
 
-    axios.post("http://localhost:8000/api/email/verify", { id: userId, token })
+    axios.post("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/email/verify", { id: userId, token })
       .then(res => {
         if (res.data.status) {
           alert(res.data.message);
           // ❌ Không dùng navigate, redirect trực tiếp
-          window.location.href = "http://localhost:5173/";
+          window.location.href = "https://proud-mud-098aeae00.1.azurestaticapps.net/";
         }
       })
       .catch(err => {

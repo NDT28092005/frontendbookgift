@@ -15,8 +15,8 @@ const AdminUserPreferences = () => {
         setLoading(true);
         try {
             const [preferencesRes, userRes] = await Promise.all([
-                axios.get(`http://localhost:8000/api/users/${id}/preferences`),
-                axios.get(`http://localhost:8000/api/users/${id}`)
+                axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences`),
+                axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}`)
             ]);
             setPreferences(preferencesRes.data || []);
             setUserInfo(userRes.data);
@@ -35,7 +35,7 @@ const AdminUserPreferences = () => {
     const handleDelete = async (prefId) => {
         if (!window.confirm('Bạn có chắc muốn xóa sở thích này?')) return;
         try {
-            await axios.delete(`http://localhost:8000/api/users/${id}/preferences/${prefId}`);
+            await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences/${prefId}`);
             fetchPreferences();
         } catch (error) {
             console.error(error);

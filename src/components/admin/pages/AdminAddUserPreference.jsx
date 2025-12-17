@@ -20,7 +20,7 @@ const AdminAddUserPreference = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:8000/api/users/${id}/preferences`, form);
+            await axios.post(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences`, form);
             navigate(`/admin/users/${id}/preferences`);
         } catch (err) {
             console.error(err);

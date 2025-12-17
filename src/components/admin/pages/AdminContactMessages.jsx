@@ -15,7 +15,7 @@ const AdminContactMessages = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:8000/api/admin/contact-messages", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/contact-messages", {
         headers: { Authorization: `Bearer ${token}` },
         params: { status: statusFilter },
       });
@@ -54,7 +54,7 @@ const AdminContactMessages = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:8000/api/admin/contact-messages/${messageId}/read`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/contact-messages/${messageId}/read`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

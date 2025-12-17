@@ -65,7 +65,7 @@ export default function Profile() {
       phone: user.phone || '',
     });
 
-    setAvatarPreview(user.avatar ? `http://localhost:8000/storage/${user.avatar}` : '');
+    setAvatarPreview(user.avatar ? `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/storage/${user.avatar}` : '');
   }, [user, navigate]);
 
   const handleChange = (e) => {
@@ -82,7 +82,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        `http://localhost:8000/api/users/${user.id}/avatar`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${user.id}/avatar`,
         formData,
         {
           headers: {
@@ -91,7 +91,7 @@ export default function Profile() {
           },
         }
       );
-      setAvatarPreview(`http://localhost:8000/storage/${res.data.avatar}`);
+      setAvatarPreview(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/storage/${res.data.avatar}`);
       setUser({ ...user, avatar: res.data.avatar });
       setMessage('✅ Ảnh đại diện đã được cập nhật!');
       setTimeout(() => setMessage(''), 3000);
@@ -108,7 +108,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.put(
-        `http://localhost:8000/api/users/${user.id}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${user.id}`,
         formData,
         {
           headers: {
@@ -134,7 +134,7 @@ export default function Profile() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:8000/api/users/${user.id}/password`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${user.id}/password`,
         passwordForm,
         {
           headers: {

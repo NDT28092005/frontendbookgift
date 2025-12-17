@@ -9,14 +9,14 @@ export default function AdminEditPromotion() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/promotions/${id}`)
+      .get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/promotions/${id}`)
       .then((res) => setPromotion(res.data))
       .catch((err) => console.error("Lỗi khi tải khuyến mãi:", err));
   }, [id]);
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:8000/api/promotions/${id}`, promotion);
+      await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/promotions/${id}`, promotion);
       alert("✅ Cập nhật thành công!");
       navigate("/admin/promotions");
     } catch (err) {

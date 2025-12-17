@@ -51,8 +51,8 @@ export default function AdminGiftOptions() {
         window.location.href = '/admin/login';
         return;
       }
-      
-      const endpoint = `http://localhost:8000/api/admin/gift-options/${activeTab}`;
+
+      const endpoint = `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/gift-options/${activeTab}`;
       const res = await axios.get(endpoint, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -167,8 +167,8 @@ export default function AdminGiftOptions() {
       setUploading(true);
       
       const endpoint = editing
-        ? `http://localhost:8000/api/admin/gift-options/${activeTab}/${editing}`
-        : `http://localhost:8000/api/admin/gift-options/${activeTab}`;
+        ? `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/gift-options/${activeTab}/${editing}`
+        : `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/gift-options/${activeTab}`;
       
       // Dùng POST thay vì PUT để tránh lỗi với FormData
       const method = 'post';
@@ -255,7 +255,7 @@ export default function AdminGiftOptions() {
       }
       
       await axios.delete(
-        `http://localhost:8000/api/admin/gift-options/${activeTab}/${id}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/gift-options/${activeTab}/${id}`,
         { 
           headers: { 
             Authorization: `Bearer ${token}`,

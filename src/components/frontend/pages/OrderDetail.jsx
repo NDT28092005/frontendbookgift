@@ -84,7 +84,7 @@ export default function OrderDetail() {
         setLoading(true);
         setError('');
         
-        const response = await axios.get(`http://localhost:8000/api/orders/${id}`, {
+        const response = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -112,7 +112,7 @@ export default function OrderDetail() {
 
         // Fetch return request nếu có
         try {
-          const returnRes = await axios.get('http://localhost:8000/api/returns', {
+          const returnRes = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/returns', {
             headers: { Authorization: `Bearer ${token}` }
           });
           const returnForOrder = returnRes.data.find(r => r.order_id === parseInt(id));
@@ -269,7 +269,7 @@ export default function OrderDetail() {
     try {
       setCancelling(true);
       const response = await axios.post(
-        `http://localhost:8000/api/orders/${order.id}/cancel`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${order.id}/cancel`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -305,7 +305,7 @@ export default function OrderDetail() {
     setSubmittingReturn(true);
     try {
       const response = await axios.post(
-        'http://localhost:8000/api/returns',
+        'https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/returns',
         {
           order_id: order.id,
           type: returnType,

@@ -15,8 +15,8 @@ const AdminUserAddresses = () => {
         setLoading(true);
         try {
             const [addressesRes, userRes] = await Promise.all([
-                axios.get(`http://localhost:8000/api/users/${id}/addresses`),
-                axios.get(`http://localhost:8000/api/users/${id}`)
+                axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/addresses`),
+                axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}`)
             ]);
             setAddresses(addressesRes.data || []);
             setUserInfo(userRes.data);
@@ -35,7 +35,7 @@ const AdminUserAddresses = () => {
     const handleDelete = async (addressId) => {
         if (!window.confirm('Bạn có chắc muốn xóa địa chỉ này?')) return;
         try {
-            await axios.delete(`http://localhost:8000/api/users/${id}/addresses/${addressId}`);
+            await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/addresses/${addressId}`);
             fetchAddresses();
         } catch (error) {
             console.error(error);

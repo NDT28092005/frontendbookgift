@@ -15,7 +15,7 @@ const AdminUser = () => {
     const fetchUsers = async (page = 1, searchTerm = '') => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8000/api/users`, {
+            const response = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users`, {
                 params: { page, search: searchTerm },
             });
             setUsers(response.data.data || []);
@@ -40,7 +40,7 @@ const AdminUser = () => {
     const handleDelete = async (userId) => {
         if (!window.confirm('Bạn có chắc muốn xóa người dùng này?')) return;
         try {
-            await axios.delete(`http://localhost:8000/api/users/${userId}`);
+            await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}`);
             fetchUsers(page, search);
         } catch (error) {
             console.error(error);

@@ -57,7 +57,7 @@ function Register() {
       setLoading(true);
       setMessage("");
       
-      const res = await axios.post("http://localhost:8000/api/auth/google/callback", {
+      const res = await axios.post("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/auth/google/callback", {
         token: credentialResponse.credential,
       });
 

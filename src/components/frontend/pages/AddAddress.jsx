@@ -73,7 +73,7 @@ export default function AddAddress() {
       }
 
       await axios.post(
-        `http://localhost:8000/api/users/${userId}/addresses`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/addresses`,
         form,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );

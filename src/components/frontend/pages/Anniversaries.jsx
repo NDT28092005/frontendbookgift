@@ -55,7 +55,7 @@ export default function Anniversaries() {
         return;
       }
 
-      const res = await axios.get(`http://localhost:8000/api/users/${userId}/anniversaries`, {
+      const res = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/anniversaries`, {
         headers: { Authorization: `Bearer ${currentToken}` }
       });
       setAnniversaries(res.data || []);
@@ -74,7 +74,7 @@ export default function Anniversaries() {
       const userId = user?.id || localStorage.getItem('userId');
       
       await axios.post(
-        `http://localhost:8000/api/users/${userId}/anniversaries`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/anniversaries`,
         form,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
@@ -95,7 +95,7 @@ export default function Anniversaries() {
       const userId = user?.id || localStorage.getItem('userId');
       
       await axios.delete(
-        `http://localhost:8000/api/users/${userId}/anniversaries/${id}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/anniversaries/${id}`,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
       fetchAnniversaries();

@@ -117,7 +117,7 @@ export default function Cart() {
 
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8000/api/cart", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart", {
         headers: { Authorization: `Bearer ${currentToken}` },
       });
       setCart(res.data);
@@ -172,7 +172,7 @@ export default function Cart() {
 
     try {
       await axios.put(
-        "http://localhost:8000/api/cart/update",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/update",
         {
           cart_id: cartId,
           quantity: item.quantity,
@@ -195,7 +195,7 @@ export default function Cart() {
     const currentToken = getCurrentToken();
     try {
       const res = await axios.delete(
-        "http://localhost:8000/api/cart/remove",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/remove",
         {
           headers: { Authorization: `Bearer ${currentToken}` },
           data: { cart_id: cartId },

@@ -75,7 +75,7 @@ export default function AdminOccasion() {
       console.log('Uploading file:', importFile.name, importFile.size);
       
       const response = await axios.post(
-        "http://localhost:8000/api/occasions/import",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/occasions/import",
         formData,
         {
           headers: {
@@ -123,7 +123,7 @@ export default function AdminOccasion() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        "http://localhost:8000/api/occasions/export",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/occasions/export",
         {
           responseType: 'blob',
           headers: {
@@ -162,7 +162,7 @@ export default function AdminOccasion() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.delete(
-        "http://localhost:8000/api/occasions/delete-all",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/occasions/delete-all",
         {
           headers: {
             Authorization: `Bearer ${token}`

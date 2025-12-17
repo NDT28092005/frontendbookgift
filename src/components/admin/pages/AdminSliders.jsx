@@ -21,7 +21,7 @@ const AdminSliders = () => {
   const fetchSliders = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8000/api/admin/sliders", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/sliders", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -111,7 +111,7 @@ const AdminSliders = () => {
 
       if (editingSlider) {
         await axios.put(
-          `http://localhost:8000/api/admin/sliders/${editingSlider.id}`,
+          `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/sliders/${editingSlider.id}`,
           submitData,
           {
             headers: {
@@ -123,7 +123,7 @@ const AdminSliders = () => {
         alert("Cập nhật slider thành công!");
       } else {
         await axios.post(
-          "http://localhost:8000/api/admin/sliders",
+          "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/sliders",
           submitData,
           {
             headers: {
@@ -149,7 +149,7 @@ const AdminSliders = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:8000/api/admin/sliders/${id}`, {
+      await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/sliders/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -165,7 +165,7 @@ const AdminSliders = () => {
   const handleToggleActive = async (slider) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/admin/sliders/${slider.id}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/sliders/${slider.id}`,
         {
           is_active: !slider.is_active,
           order: slider.order,
@@ -199,7 +199,7 @@ const AdminSliders = () => {
     try {
       for (let i = 0; i < tempSliders.length; i++) {
         await axios.put(
-          `http://localhost:8000/api/admin/sliders/${tempSliders[i].id}`,
+          `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin/sliders/${tempSliders[i].id}`,
           {
             order: i,
             is_active: tempSliders[i].is_active,

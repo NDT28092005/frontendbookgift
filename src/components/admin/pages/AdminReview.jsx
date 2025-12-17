@@ -25,7 +25,7 @@ export default function AdminReview() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/products");
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products");
       setProducts(Array.isArray(res.data) ? res.data : res.data.data || []);
     } catch (error) {
       console.error("Lỗi khi tải sản phẩm:", error);
@@ -34,7 +34,7 @@ export default function AdminReview() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/users");
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users");
       const usersData = res.data.data || res.data || [];
       setUsers(Array.isArray(usersData) ? usersData : []);
     } catch (error) {
@@ -45,7 +45,7 @@ export default function AdminReview() {
   const fetchReviews = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8000/api/reviews");
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews");
       const data = Array.isArray(res.data) ? res.data : res.data.data || [];
       setReviews(data);
     } catch (error) {
@@ -58,8 +58,8 @@ export default function AdminReview() {
   const handleBlock = async (id, blocked) => {
     try {
       const endpoint = blocked 
-        ? `http://localhost:8000/api/reviews/${id}/unblock` 
-        : `http://localhost:8000/api/reviews/${id}/block`;
+        ? `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/${id}/unblock`
+        : `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/${id}/block`;
       await axios.patch(endpoint);
       setReviews((prev) =>
         prev.map((r) =>
@@ -75,7 +75,7 @@ export default function AdminReview() {
   const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc muốn xóa review này không?")) {
       try {
-        await axios.delete(`http://localhost:8000/api/reviews/${id}`);
+        await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/${id}`);
         setReviews((prev) => prev.filter((r) => r.review_id !== id));
       } catch (error) {
         console.error('Error deleting review:', error);
@@ -112,7 +112,7 @@ export default function AdminReview() {
       }
 
       await axios.post(
-        "http://localhost:8000/api/reviews",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews",
         reviewData,
         {
           headers: {

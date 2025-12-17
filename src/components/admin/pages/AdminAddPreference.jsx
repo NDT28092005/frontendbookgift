@@ -23,7 +23,7 @@ const AdminAddPreference = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            await axios.post(`http://localhost:8000/api/users/${id}/preferences`, form);
+            await axios.post(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/preferences`, form);
             navigate(`/admin/users/${id}/preferences`);
         } catch (error) {
             console.error('Error adding preference:', error);

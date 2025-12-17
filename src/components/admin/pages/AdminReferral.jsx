@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 
-const API_BASE = "http://localhost:8000/api/admin";
+const API_BASE = "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/admin";
 
 export default function AdminReferral() {
   const [referrals, setReferrals] = useState([]);

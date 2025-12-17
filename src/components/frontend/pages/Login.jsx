@@ -38,7 +38,7 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:8000/api/login', {
+      const res = await fetch('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -95,7 +95,7 @@ export default function Login() {
       setLoading(true);
       setError('');
       
-      const res = await axios.post('http://localhost:8000/api/auth/google/callback', {
+      const res = await axios.post('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/auth/google/callback', {
         token: credentialResponse.credential,
       });
       

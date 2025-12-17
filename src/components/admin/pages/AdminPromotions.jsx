@@ -21,7 +21,7 @@ export default function AdminPromotions() {
 
   const fetchPromotions = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/promotions");
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/promotions");
       setPromotions(res.data.data || res.data || []);
     } catch (error) {
       console.error("Lỗi khi fetch promotions:", error);
@@ -32,7 +32,7 @@ export default function AdminPromotions() {
 
   const handleCreatePromotion = async () => {
     try {
-      await axios.post("http://localhost:8000/api/promotions", newPromo);
+      await axios.post("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/promotions", newPromo);
       alert("✅ Tạo khuyến mãi thành công!");
       setShowModal(false);
       setNewPromo({
@@ -57,7 +57,7 @@ export default function AdminPromotions() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/promotions/${id}`);
+      await axios.delete(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/promotions/${id}`);
       alert("🗑️ Đã xóa thành công!");
       fetchPromotions();
     } catch (error) {

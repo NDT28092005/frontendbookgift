@@ -102,7 +102,7 @@ export default function Checkout() {
 
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/cart", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart", {
         headers: { Authorization: `Bearer ${currentToken}` },
       });
       setCart(res.data);
@@ -159,7 +159,7 @@ export default function Checkout() {
     try {
       const currentToken = token || localStorage.getItem("token");
       console.log("Fetching loyalty points for user:", user.id);
-      const res = await axios.get("http://localhost:8000/api/me", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/me", {
         headers: { Authorization: `Bearer ${currentToken}` },
       });
       const newPoints = res.data.loyalty_points || 0;
@@ -175,9 +175,9 @@ export default function Checkout() {
   const fetchGiftOptions = async () => {
     try {
       const [papersRes, accessoriesRes, cardsRes] = await Promise.all([
-        axios.get('http://localhost:8000/api/gift-options/wrapping-papers'),
-        axios.get('http://localhost:8000/api/gift-options/decorative-accessories'),
-        axios.get('http://localhost:8000/api/gift-options/card-types')
+        axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/gift-options/wrapping-papers'),
+        axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/gift-options/decorative-accessories'),
+        axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/gift-options/card-types')
       ]);
 
       console.log('Wrapping papers:', papersRes.data);
@@ -208,7 +208,7 @@ export default function Checkout() {
 
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/gift/preview",
+          "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/gift/preview",
           {
             wrapping_paper_id: parseInt(wrappingPaperId),
             decorative_accessory_id: parseInt(decorativeAccessoryId),
@@ -262,7 +262,7 @@ export default function Checkout() {
     setLoadingAddresses(true);
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/users/${userId}/addresses`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/addresses`,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
       setAddresses(res.data || []);
@@ -298,7 +298,7 @@ export default function Checkout() {
       const orderValue = cart?.total_amount || 0;
 
       const res = await axios.post(
-        "http://localhost:8000/api/shipping/calc",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/shipping/calc",
         {
           address: address,
           province: province,
@@ -388,7 +388,7 @@ export default function Checkout() {
 
       const addressId = editingAddress.address_id || editingAddress.id;
       await axios.put(
-        `http://localhost:8000/api/users/${userId}/addresses/${addressId}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/addresses/${addressId}`,
         editForm,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
@@ -427,7 +427,7 @@ export default function Checkout() {
       }
 
       await axios.delete(
-        `http://localhost:8000/api/users/${userId}/addresses/${deletingAddressId}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/addresses/${deletingAddressId}`,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
 
@@ -543,7 +543,7 @@ export default function Checkout() {
       console.log("Sending checkout data:", checkoutData);
 
       const res = await axios.post(
-        "http://localhost:8000/api/cart/checkout",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/checkout",
         checkoutData,
         {
           headers: {
@@ -596,7 +596,7 @@ export default function Checkout() {
         
         // Xóa giỏ hàng sau khi COD thành công
         try {
-          await fetch("http://localhost:8000/api/cart/clear-cart", {
+          await fetch("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/clear-cart", {
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
@@ -701,7 +701,7 @@ export default function Checkout() {
         if (orderId) {
           try {
             await axios.post(
-              "http://localhost:8000/api/orders/mark-paid",
+              "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/mark-paid",
               { order_id: orderId },
               {
                 headers: {
@@ -730,7 +730,7 @@ export default function Checkout() {
         }
 
         // Xóa giỏ hàng
-        await fetch("http://localhost:8000/api/cart/clear-cart", {
+        await fetch("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/clear-cart", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -774,7 +774,7 @@ export default function Checkout() {
 
     if (timeLeft === 1) {
       const currentToken = token || localStorage.getItem("token");
-      fetch("http://localhost:8000/api/cart/cancel-order", {
+      fetch("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/cancel-order", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${currentToken}`,

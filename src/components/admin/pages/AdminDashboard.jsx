@@ -30,9 +30,9 @@ export default function AdminDashboard() {
     try {
       // Gọi các API để lấy thống kê
       const [usersRes, productsRes, ordersRes] = await Promise.all([
-        axios.get('http://localhost:8000/api/users'),
-        axios.get('http://localhost:8000/api/products'),
-        axios.get('http://localhost:8000/api/orders')
+        axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users'),
+        axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products'),
+        axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders')
       ]);
 
       const users = usersRes.data.data || usersRes.data || [];

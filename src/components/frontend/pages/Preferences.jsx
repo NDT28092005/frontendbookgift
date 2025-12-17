@@ -61,7 +61,7 @@ export default function Preferences() {
         return;
       }
 
-      const res = await axios.get(`http://localhost:8000/api/users/${userId}/preferences`, {
+      const res = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/preferences`, {
         headers: { Authorization: `Bearer ${currentToken}` }
       });
       setPreferences(res.data || []);
@@ -101,13 +101,13 @@ export default function Preferences() {
       
       if (editingId) {
         await axios.put(
-          `http://localhost:8000/api/users/${userId}/preferences/${editingId}`,
+          `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/preferences/${editingId}`,
           form,
           { headers: { Authorization: `Bearer ${currentToken}` } }
         );
       } else {
         await axios.post(
-          `http://localhost:8000/api/users/${userId}/preferences`,
+          `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/preferences`,
           form,
           { headers: { Authorization: `Bearer ${currentToken}` } }
         );
@@ -142,7 +142,7 @@ export default function Preferences() {
       const userId = user?.id || localStorage.getItem('userId');
       
       await axios.delete(
-        `http://localhost:8000/api/users/${userId}/preferences/${id}`,
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${userId}/preferences/${id}`,
         { headers: { Authorization: `Bearer ${currentToken}` } }
       );
       fetchPreferences();

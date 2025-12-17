@@ -15,7 +15,7 @@ const AdminOrders = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8000/api/orders", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders", {
         params: { status: statusFilter, search },
       });
       setOrders(Array.isArray(res.data.data) ? res.data.data : []);
@@ -44,7 +44,7 @@ const AdminOrders = () => {
 
   const handleChangeStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:8000/api/orders/${orderId}/status`, {
+      await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${orderId}/status`, {
         status: newStatus,
       });
       fetchOrders();
@@ -58,7 +58,7 @@ const AdminOrders = () => {
   const handleExport = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/orders/export",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/export",
         { 
           responseType: "blob",
           headers: {
@@ -93,7 +93,7 @@ const AdminOrders = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/orders/import",
+        "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/import",
         formData,
         {
           headers: {

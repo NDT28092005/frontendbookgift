@@ -22,7 +22,7 @@ const AdminEditAddress = () => {
     useEffect(() => {
         const fetchAddress = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/users/${id}/addresses/${addrId}`);
+                const res = await axios.get(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/addresses/${addrId}`);
                 setForm(res.data);
             } catch (error) {
                 console.error(error);
@@ -43,7 +43,7 @@ const AdminEditAddress = () => {
         e.preventDefault();
         setSaving(true);
         try {
-            await axios.put(`http://localhost:8000/api/users/${id}/addresses/${addrId}`, form);
+            await axios.put(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/users/${id}/addresses/${addrId}`, form);
             alert('Cập nhật địa chỉ thành công!');
             navigate(`/admin/users/${id}/addresses`);
         } catch (error) {
