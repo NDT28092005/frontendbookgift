@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     if (!currentToken) return;
     
     try {
-      const res = await axios.get("http://localhost:8000/api/me", {
+      const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/me", {
         headers: { Authorization: `Bearer ${currentToken}` },
       });
       const userData = res.data.user || res.data;
