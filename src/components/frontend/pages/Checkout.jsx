@@ -1663,9 +1663,8 @@ export default function Checkout() {
                         placeholder="Ví dụ: Phường 1, Phường Hải Châu"
                         value={editForm.address_line2}
                         onChange={(e) => setEditForm({ ...editForm, address_line2: e.target.value })}
-                        required
                       />
-                    </Form.Group>
+                    </Form.Group> 
                   </Col>
 
                   <Col md={6}>

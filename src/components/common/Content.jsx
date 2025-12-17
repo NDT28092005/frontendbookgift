@@ -56,7 +56,7 @@ const Content = () => {
         const fetchSliders = async () => {
             try {
                 setSlidersLoading(true);
-                const response = await axios.get('http://localhost:8000/api/sliders');
+                const response = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/sliders');
                 if (!isMounted) return;
                 const slidersList = Array.isArray(response.data) ? response.data : [];
                 setSliders(slidersList);
@@ -170,7 +170,7 @@ const Content = () => {
         const fetchReviews = async () => {
             try {
                 setReviewsLoading(true);
-                const response = await axios.get('http://localhost:8000/api/reviews/');
+                const response = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/reviews/');
                 if (!isMounted) return;
                 
                 const allReviews = Array.isArray(response.data) ? response.data : [];
@@ -250,7 +250,7 @@ const Content = () => {
         try {
             setAddingToCartId(product.id);
             await axios.post(
-                "http://localhost:8000/api/cart/add",
+                "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/cart/add",
                 { product_id: product.id, quantity: 1 },
                 { headers: { Authorization: `Bearer ${currentToken}` } }
             );
@@ -549,7 +549,7 @@ const Content = () => {
                                     };
 
                                     const response = await axios.post(
-                                        'http://localhost:8000/api/contact',
+                                        'https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/contact',
                                         contactFormData,
                                         { headers }
                                     );

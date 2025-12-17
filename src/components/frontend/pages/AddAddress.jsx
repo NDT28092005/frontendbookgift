@@ -234,7 +234,7 @@ export default function AddAddress() {
                     fontWeight: 600,
                     marginBottom: '0.5rem'
                   }}>
-                    Phường/Xã <span style={{ color: '#FB6376' }}>*</span>
+                    Địa chỉ phụ <span style={{ color: '#FB6376' }}>*</span>
                   </Form.Label>
                   <Form.Control
                     type="text"
@@ -242,7 +242,6 @@ export default function AddAddress() {
                     placeholder="Ví dụ: Phường 1, Phường Hải Châu"
                     value={form.address_line2}
                     onChange={handleChange}
-                    required
                     style={{
                       borderRadius: '15px',
                       border: '2px solid rgba(251, 99, 118, 0.2)',
@@ -269,7 +268,7 @@ export default function AddAddress() {
                     fontWeight: 600,
                     marginBottom: '0.5rem'
                   }}>
-                    Tỉnh <span style={{ color: '#FB6376' }}>*</span>
+                    Tỉnh/Thành phố <span style={{ color: '#FB6376' }}>*</span>
                   </Form.Label>
                   <Form.Control
                     type="text"
@@ -304,7 +303,7 @@ export default function AddAddress() {
                     fontWeight: 600,
                     marginBottom: '0.5rem'
                   }}>
-                    Thành phố <span style={{ color: '#FB6376' }}>*</span>
+                    Phường/Xã <span style={{ color: '#FB6376' }}>*</span>
                   </Form.Label>
                   <Form.Control
                     type="text"
