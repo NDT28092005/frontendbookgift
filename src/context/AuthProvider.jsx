@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = async () => {
       try {
         console.log('Fetching user with token:', storedToken);
-        const res = await axios.get("http://localhost:8000/api/me", {
+        const res = await axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/me", {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         // API trả về user trực tiếp, không wrap trong object
@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }) => {
           if (!user && !loading) {
             // Fetch user if we have token but no user
             setLoading(true);
-            axios.get("http://localhost:8000/api/me", {
+            axios.get("https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/me", {
               headers: { Authorization: `Bearer ${storedToken}` },
             })
             .then(res => {
