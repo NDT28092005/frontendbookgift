@@ -3,9 +3,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import Header from '../../common/Header';
-import Footer from '../../common/Footer';
-import { FaLock, FaEnvelope, FaSignInAlt } from 'react-icons/fa';
+import { FaLock, FaEnvelope, FaSignInAlt, FaHome } from 'react-icons/fa';
 
 export default function Login() {
   const { setUser, setToken } = useContext(AuthContext);
@@ -141,18 +139,15 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <Header />
+    <div className="login-page-wrapper">
       <div className="login-container">
+        <Link to="/" className="home-button">
+          <FaHome className="home-icon" />
+          <span>Về trang chủ</span>
+        </Link>
         <div className="login-card">
           <div className="login-header">
-            <div style={{
-              fontSize: '3rem',
-              color: '#FB6376',
-              marginBottom: '1rem',
-              display: 'flex',
-              justifyContent: 'center'
-            }}>
+            <div className="login-icon-wrapper">
               <FaSignInAlt />
             </div>
             <h1>Đăng nhập</h1>
@@ -160,22 +155,16 @@ export default function Login() {
           </div>
 
           {error && (
-            <div className="login-error error">
-              ⚠️ {error}
+            <div className="login-error error" role="alert">
+              <span className="error-icon">⚠️</span>
+              <span className="error-text">{error}</span>
             </div>
           )}
 
           <form onSubmit={handleLogin} className="login-form">
             <div className="form-group">
-              <div style={{ position: 'relative' }}>
-                <FaEnvelope style={{
-                  position: 'absolute',
-                  left: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#FB6376',
-                  fontSize: '1rem'
-                }} />
+              <div className="input-wrapper">
+                <FaEnvelope className="input-icon" />
                 <input
                   type="email"
                   placeholder="Email"
@@ -183,20 +172,13 @@ export default function Login() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                   disabled={loading}
-                  style={{ paddingLeft: '3rem' }}
+                  className="login-input"
                 />
               </div>
             </div>
             <div className="form-group">
-              <div style={{ position: 'relative' }}>
-                <FaLock style={{
-                  position: 'absolute',
-                  left: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#FB6376',
-                  fontSize: '1rem'
-                }} />
+              <div className="input-wrapper">
+                <FaLock className="input-icon" />
                 <input
                   type="password"
                   placeholder="Mật khẩu"
@@ -204,22 +186,27 @@ export default function Login() {
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
                   disabled={loading}
-                  style={{ paddingLeft: '3rem' }}
+                  className="login-input"
                 />
               </div>
             </div>
             <button type="submit" className="login-button" disabled={loading}>
-              {loading ? 'Đang xử lý...' : (
+              {loading ? (
+                <span className="button-loading">
+                  <span className="spinner"></span>
+                  <span>Đang xử lý...</span>
+                </span>
+              ) : (
                 <>
-                  <FaSignInAlt style={{ marginRight: '0.5rem' }} />
-                  Đăng nhập
+                  <FaSignInAlt className="button-icon" />
+                  <span>Đăng nhập</span>
                 </>
               )}
             </button>
           </form>
 
           <div className="login-divider">
-            <span>Hoặc</span>
+            <span className="divider-text">Hoặc</span>
           </div>
 
           <div className="google-login-wrapper">
@@ -238,7 +225,6 @@ export default function Login() {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

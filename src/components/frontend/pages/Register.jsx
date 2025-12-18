@@ -4,9 +4,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import Header from "../../common/Header";
-import Footer from "../../common/Footer";
-import { FaUser, FaEnvelope, FaLock, FaUserPlus } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock, FaUserPlus, FaHome } from "react-icons/fa";
 
 function Register() {
   const { setUser, setToken } = useContext(AuthContext);
@@ -105,18 +103,15 @@ function Register() {
   };
 
   return (
-    <div>
-      <Header />
+    <div className="login-page-wrapper">
       <div className="register-container">
+        <Link to="/" className="home-button">
+          <FaHome className="home-icon" />
+          <span>Về trang chủ</span>
+        </Link>
         <div className="register-card">
           <div className="register-header">
-            <div style={{
-              fontSize: '3rem',
-              color: '#FB6376',
-              marginBottom: '1rem',
-              display: 'flex',
-              justifyContent: 'center'
-            }}>
+            <div className="login-icon-wrapper">
               <FaUserPlus />
             </div>
             <h1>Đăng ký tài khoản</h1>
@@ -124,22 +119,16 @@ function Register() {
           </div>
 
           {message && (
-            <div className={`register-message ${message.startsWith("⚠️") ? "error" : "success"}`}>
-              {message}
+            <div className={`register-message ${message.startsWith("⚠️") ? "error" : "success"}`} role="alert">
+              <span className="error-icon">{message.startsWith("⚠️") ? "⚠️" : "✓"}</span>
+              <span className="error-text">{message.replace(/^⚠️\s*/, '').replace(/^✓\s*/, '')}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="register-form">
             <div className="form-group">
-              <div style={{ position: 'relative' }}>
-                <FaUser style={{
-                  position: 'absolute',
-                  left: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#FB6376',
-                  fontSize: '1rem'
-                }} />
+              <div className="input-wrapper">
+                <FaUser className="input-icon" />
                 <input
                   type="text"
                   placeholder="Tên hiển thị"
@@ -147,20 +136,13 @@ function Register() {
                   required
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   disabled={loading}
-                  style={{ paddingLeft: '3rem' }}
+                  className="login-input"
                 />
               </div>
             </div>
             <div className="form-group">
-              <div style={{ position: 'relative' }}>
-                <FaEnvelope style={{
-                  position: 'absolute',
-                  left: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#FB6376',
-                  fontSize: '1rem'
-                }} />
+              <div className="input-wrapper">
+                <FaEnvelope className="input-icon" />
                 <input
                   type="email"
                   placeholder="Email"
@@ -168,20 +150,13 @@ function Register() {
                   required
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   disabled={loading}
-                  style={{ paddingLeft: '3rem' }}
+                  className="login-input"
                 />
               </div>
             </div>
             <div className="form-group">
-              <div style={{ position: 'relative' }}>
-                <FaLock style={{
-                  position: 'absolute',
-                  left: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#FB6376',
-                  fontSize: '1rem'
-                }} />
+              <div className="input-wrapper">
+                <FaLock className="input-icon" />
                 <input
                   type="password"
                   placeholder="Mật khẩu"
@@ -189,22 +164,27 @@ function Register() {
                   required
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
                   disabled={loading}
-                  style={{ paddingLeft: '3rem' }}
+                  className="login-input"
                 />
               </div>
             </div>
             <button type="submit" className="register-button" disabled={loading}>
-              {loading ? "Đang xử lý..." : (
+              {loading ? (
+                <span className="button-loading">
+                  <span className="spinner"></span>
+                  <span>Đang xử lý...</span>
+                </span>
+              ) : (
                 <>
-                  <FaUserPlus style={{ marginRight: '0.5rem' }} />
-                  Đăng ký
+                  <FaUserPlus className="button-icon" />
+                  <span>Đăng ký</span>
                 </>
               )}
             </button>
           </form>
 
           <div className="register-divider">
-            <span>Hoặc</span>
+            <span className="divider-text">Hoặc</span>
           </div>
 
           <div className="google-login-wrapper">
@@ -219,7 +199,6 @@ function Register() {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
