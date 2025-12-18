@@ -802,26 +802,29 @@ export default function Checkout() {
 
   if (authLoading || loading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5">
-          <div className="checkout-loading-container">
-            <div className="checkout-spinner"></div>
-            <p className="checkout-loading-text">
-              Đang tải thông tin...
-            </p>
-          </div>
-        </Container>
+        <main className="checkout-page-wrapper">
+          <Container className="mt-5 pt-5">
+            <div className="checkout-loading-container">
+              <div className="checkout-spinner"></div>
+              <p className="checkout-loading-text">
+                Đang tải thông tin...
+              </p>
+            </div>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
   if (error && !cart) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5">
+        <main className="checkout-page-wrapper">
+          <Container className="mt-5 pt-5">
           <Card className="checkout-error-card">
             <Card.Body>
               <h2 className="checkout-error-title">Lỗi</h2>
@@ -829,16 +832,18 @@ export default function Checkout() {
               <Button onClick={() => window.location.reload()}>Thử lại</Button>
             </Card.Body>
           </Card>
-        </Container>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="checkout-page-wrapper">
+    <>
       <Header />
-      <Container className="mt-5 pt-5 checkout-container">
+      <main className="checkout-page-wrapper">
+        <Container className="mt-5 pt-5 checkout-container">
         <div className="checkout-header-section">
           <Button
             variant="link"
@@ -1477,6 +1482,7 @@ export default function Checkout() {
           </Col>
         </Row>
       </Container>
+      </main>
       <Footer />
 
       {/* Modal chọn địa chỉ */}
@@ -1816,7 +1822,7 @@ export default function Checkout() {
           </Card>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

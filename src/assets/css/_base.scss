@@ -12,6 +12,25 @@ body {
     min-height: 100vh;
     line-height: 1.6;
     position: relative;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    
+    // Header và content cùng layer, tách biệt tự nhiên
+    > .hd {
+        position: relative;
+        width: 100%;
+        z-index: 100;
+    }
+    
+    // Content cùng layer với header
+    > main,
+    > .main-content,
+    > div:not(.hd) {
+        position: relative;
+        z-index: 1;
+    }
     
     &::before {
         content: '';

@@ -220,9 +220,10 @@ export default function ProductList() {
   }
 
   return (
-    <div>
+    <>
       <Header />
-      <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
+      <main className="product-list-page">
+        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
         {/* Header Section */}
         <div style={{
           marginBottom: '2.5rem',
@@ -600,8 +601,9 @@ export default function ProductList() {
             ))
           )}
         </Row>
-      </Container>
+        </Container>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }

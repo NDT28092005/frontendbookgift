@@ -60,21 +60,16 @@ const Header = () => {
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.75rem',
                                 textDecoration: 'none'
                             }}
                         >
                             <img 
-                                src="/logo.png" 
+                                src="/newlogo.png" 
                                 alt="QUÀ TẶNG Logo"
-                                onError={(e) => {
-                                    // Ẩn logo nếu không tìm thấy và hiển thị text fallback
-                                    e.target.style.display = 'none';
-                                }}
                                 style={{
-                                    height: '60px',
+                                    height: '100px',
                                     width: 'auto',
-                                    maxWidth: '120px',
+                                    maxWidth: '200px',
                                     objectFit: 'contain',
                                     transition: 'transform 0.3s ease',
                                     filter: 'drop-shadow(0 2px 4px rgba(93, 42, 66, 0.1))'
@@ -86,21 +81,6 @@ const Header = () => {
                                     e.currentTarget.style.transform = 'scale(1)';
                                 }}
                             />
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                lineHeight: '1.2'
-                            }}>
-                                <span style={{ 
-                                    color: '#5D2A42', 
-                                    fontSize: '1.4rem',
-                                    fontWeight: 700,
-                                    letterSpacing: '0.5px',
-                                    fontFamily: 'serif'
-                                }}>
-                                    QUÀ TẶNG
-                                </span>
-                            </div>
                         </Navbar.Brand>
 
                         {/* Toggle button for mobile */}

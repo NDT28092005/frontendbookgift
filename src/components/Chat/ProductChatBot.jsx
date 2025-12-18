@@ -12,10 +12,12 @@ export default function ProductChatBot({ onClose }) {
   const [inputText, setInputText] = useState("");
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showQuickReplies, setShowQuickReplies] = useState(true);
+  const [showQuickReplies, setShowQuickReplies] = useState(false);
   const [conversationId, setConversationId] = useState(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const blurTimeoutRef = useRef(null);
 
   // Lưu tin nhắn vào backend
   const saveMessageToBackend = useCallback(async (messageData) => {
@@ -149,7 +151,8 @@ export default function ProductChatBot({ onClose }) {
 
     setMessages((prev) => [...prev, userMessage]);
     setInputText("");
-    setShowQuickReplies(false);
+    setShowQuickReplies(false); // 发送消息后隐藏类别选项
+    setIsInputFocused(false); // 移除焦点状态
 
     // Lưu tin nhắn user vào backend
     await saveMessageToBackend(userMessage);
@@ -214,8 +217,16 @@ export default function ProductChatBot({ onClose }) {
 
   // Xử lý chọn category từ quick reply
   const handleQuickReplyClick = (category) => {
+    // 清除延迟隐藏
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current);
+    }
     setInputText(category.name);
+    setIsInputFocused(false);
+    setShowQuickReplies(false);
+    // 让输入框重新获得焦点以便发送消息
     setTimeout(() => {
+      inputRef.current?.focus();
       handleSendMessage();
     }, 100);
   };
@@ -344,10 +355,22 @@ export default function ProductChatBot({ onClose }) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Replies */}
-      {showQuickReplies && categories.length > 0 && (
+      {/* Quick Replies - 当输入框获得焦点时显示 */}
+      {isInputFocused && categories.length > 0 && (
         <div className="quick-replies">
-          <p className="quick-replies-label">Chọn danh mục:</p>
+          <div className="quick-replies-header">
+            <p className="quick-replies-label">Chọn danh mục:</p>
+            <button 
+              className="quick-replies-toggle-btn"
+              onClick={() => {
+                setIsInputFocused(false);
+                setShowQuickReplies(false);
+              }}
+              title="Ẩn danh mục"
+            >
+              ✕
+            </button>
+          </div>
           <div className="quick-replies-list">
             {categories.slice(0, 6).map((category) => (
               <button
@@ -368,6 +391,23 @@ export default function ProductChatBot({ onClose }) {
           type="text"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
+          onFocus={() => {
+            // 清除之前的延迟隐藏
+            if (blurTimeoutRef.current) {
+              clearTimeout(blurTimeoutRef.current);
+            }
+            setIsInputFocused(true);
+            setShowQuickReplies(true);
+          }}
+          onBlur={(e) => {
+            // 延迟隐藏，以便点击类别按钮时不会立即隐藏
+            blurTimeoutRef.current = setTimeout(() => {
+              if (!e.target.value.trim()) {
+                setIsInputFocused(false);
+                setShowQuickReplies(false);
+              }
+            }, 200);
+          }}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
               handleSendMessage();

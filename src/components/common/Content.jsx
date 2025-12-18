@@ -6,6 +6,7 @@ import { getProducts } from '../../api/product';
 import { getCategories } from '../../api/category';
 import PosterSlider from './PosterSlider';
 import HeroSlider from './HeroSlider';
+import ProductSlider from './ProductSlider';
 import { FaEnvelope, FaUser, FaPhone, FaComment } from 'react-icons/fa';
 
 // Fallback images cho categories
@@ -175,7 +176,7 @@ const Content = () => {
                 
                 const allReviews = Array.isArray(response.data) ? response.data : [];
                 // Lọc reviews: không bị block, có comment, và có user info
-                const validReviews = allReviews
+                const filteredReviews = allReviews
                     .filter(review => 
                         review && 
                         !review.is_blocked && 
@@ -184,13 +185,36 @@ const Content = () => {
                         review.user &&
                         review.rating >= 4 // Chỉ lấy reviews 4-5 sao
                     )
-                    .slice(0, 10) // Lấy tối đa 10 reviews
-                    .map(review => ({
-                        id: review.review_id || review.id,
-                        name: review.user?.name || 'Khách hàng',
-                        rating: review.rating || 5,
-                        content: review.comment
-                    }));
+                    .slice(0, 10); // Lấy tối đa 10 reviews
+
+                // Lấy danh sách product_id duy nhất
+                const productIds = [...new Set(filteredReviews.map(r => r.product_id).filter(Boolean))];
+                
+                // Lấy thông tin sản phẩm
+                const productMap = {};
+                if (productIds.length > 0) {
+                    try {
+                        const productsResponse = await axios.get('https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/products');
+                        const productsList = Array.isArray(productsResponse.data) ? productsResponse.data : 
+                                           (Array.isArray(productsResponse.data?.data) ? productsResponse.data.data : []);
+                        productsList.forEach(product => {
+                            if (product.id) {
+                                productMap[product.id] = product.name;
+                            }
+                        });
+                    } catch (err) {
+                        console.error('Error fetching products for reviews:', err);
+                    }
+                }
+
+                // Map reviews với product name
+                const validReviews = filteredReviews.map(review => ({
+                    id: review.review_id || review.id,
+                    name: review.user?.name || 'Khách hàng',
+                    rating: review.rating || 5,
+                    content: review.comment,
+                    productName: review.product_id ? (productMap[review.product_id] || 'Sản phẩm') : 'Sản phẩm'
+                }));
                 
                 if (!isMounted) return;
                 setReviews(validReviews);
@@ -209,7 +233,7 @@ const Content = () => {
         };
     }, []);
 
-    const newArrivals = useMemo(() => products.slice(0, 4), [products]);
+    const newArrivals = useMemo(() => products.slice(0, 8), [products]);
 
     const formatPrice = (price) => {
         if (price === undefined || price === null) return 'Đang cập nhật';
@@ -379,23 +403,36 @@ const Content = () => {
                 </div>
             </section>
 
-            {/* New Arrivals - Grid 4 columns */}
-            <section className="product-section">
+            {/* New Arrivals - Slider */}
+            <section className="product-section product-section--slider">
                 <div className="container">
-                    <div className="section-header">
-                        <h2 className="section-title">NEW ARRIVALS</h2>
-                        <button className="view-all-link" onClick={() => navigate('/products')}>
-                            View All
-                        </button>
-                    </div>
                     {error && <div className="alert-error">{error}</div>}
-                    <div className="product-grid">
-                        {loading
-                            ? Array.from({ length: 4 }).map((_, index) => renderSkeleton(index))
-                            : newArrivals.length
-                                ? newArrivals.map(renderProductCard)
-                                : <div className="empty-state">Chưa có sản phẩm mới để hiển thị.</div>}
-                    </div>
+                    {loading ? (
+                        <div className="product-slider">
+                            <div className="product-slider__header">
+                                <h2 className="product-slider__title">NEW ARRIVALS</h2>
+                                <button className="product-slider__view-all" onClick={() => navigate('/products')}>
+                                    View All
+                                </button>
+                            </div>
+                            <div className="product-slider__track">
+                                {Array.from({ length: 8 }).map((_, index) => (
+                                    <div key={`skeleton-${index}`} className="product-slider__item">
+                                        {renderSkeleton(index)}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : newArrivals.length > 0 ? (
+                        <ProductSlider
+                            items={newArrivals}
+                            renderItem={renderProductCard}
+                            title="NEW ARRIVALS"
+                            viewAllLink={() => navigate('/products')}
+                        />
+                    ) : (
+                        <div className="empty-state">Chưa có sản phẩm mới để hiển thị.</div>
+                    )}
                 </div>
             </section>
 
@@ -470,6 +507,11 @@ const Content = () => {
                                     <div className="author">
                                         <strong>{item.name}</strong>
                                     </div>
+                                    {item.productName && (
+                                        <div className="product-name">
+                                            {item.productName}
+                                        </div>
+                                    )}
                                 </article>
                             )}
                         />
@@ -503,35 +545,55 @@ const Content = () => {
                                 Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn
                             </p>
                         </div>
-                        {contactSuccess && (
+                        {contactSuccess ? (
                             <div style={{
-                                padding: '1rem',
-                                marginBottom: '1.5rem',
-                                background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1))',
-                                border: '2px solid #4CAF50',
-                                borderRadius: '10px',
-                                color: '#2E7D32',
-                                textAlign: 'center',
-                                fontWeight: 600
+                                padding: '3rem 2rem',
+                                textAlign: 'center'
                             }}>
-                                ✓ Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.
+                                <div style={{
+                                    padding: '2rem',
+                                    background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(129, 199, 132, 0.1))',
+                                    border: '2px solid #4CAF50',
+                                    borderRadius: '15px',
+                                    color: '#2E7D32',
+                                    marginBottom: '1.5rem'
+                                }}>
+                                    <div style={{
+                                        fontSize: '3rem',
+                                        marginBottom: '1rem'
+                                    }}>✓</div>
+                                    <div style={{
+                                        fontSize: '1.2rem',
+                                        fontWeight: 600,
+                                        marginBottom: '0.5rem'
+                                    }}>
+                                        Cảm ơn bạn đã liên hệ!
+                                    </div>
+                                    <div style={{
+                                        fontSize: '1rem',
+                                        opacity: 0.9
+                                    }}>
+                                        Chúng tôi sẽ phản hồi sớm nhất có thể.
+                                    </div>
+                                </div>
                             </div>
-                        )}
-                        {contactError && (
-                            <div style={{
-                                padding: '1rem',
-                                marginBottom: '1.5rem',
-                                background: 'linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(239, 154, 154, 0.1))',
-                                border: '2px solid #F44336',
-                                borderRadius: '10px',
-                                color: '#C62828',
-                                textAlign: 'center',
-                                fontWeight: 600
-                            }}>
-                                ✗ {contactError}
-                            </div>
-                        )}
-                        <form
+                        ) : (
+                            <>
+                                {contactError && (
+                                    <div style={{
+                                        padding: '1rem',
+                                        marginBottom: '1.5rem',
+                                        background: 'linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(239, 154, 154, 0.1))',
+                                        border: '2px solid #F44336',
+                                        borderRadius: '10px',
+                                        color: '#C62828',
+                                        textAlign: 'center',
+                                        fontWeight: 600
+                                    }}>
+                                        ✗ {contactError}
+                                    </div>
+                                )}
+                                <form
                             className="newsletter-form"
                             onSubmit={async (e) => {
                                 e.preventDefault();
@@ -562,7 +624,6 @@ const Content = () => {
                                             phone: '',
                                             message: ''
                                         });
-                                        setTimeout(() => setContactSuccess(false), 5000);
                                     }
                                 } catch (err) {
                                     if (err.response?.data?.errors) {
@@ -826,7 +887,9 @@ const Content = () => {
                             >
                                 {contactLoading ? 'Đang gửi...' : 'Gửi tin nhắn'}
                             </button>
-                        </form>
+                                </form>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>

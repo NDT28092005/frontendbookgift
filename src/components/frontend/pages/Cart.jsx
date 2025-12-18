@@ -86,7 +86,6 @@ export default function Cart() {
   const { token, loading: authLoading } = useContext(AuthContext);
   const [cart, setCart] = useState({ items: [], total_amount: 0 });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -121,9 +120,8 @@ export default function Cart() {
         headers: { Authorization: `Bearer ${currentToken}` },
       });
       setCart(res.data);
-      setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || "Lỗi tải giỏ hàng");
+      console.error("Lỗi tải giỏ hàng:", err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
@@ -202,8 +200,8 @@ export default function Cart() {
         }
       );
       setCart(res.data);
-    } catch (error) {
-      setError("Không thể xóa sản phẩm");
+    } catch (err) {
+      console.error("Không thể xóa sản phẩm:", err);
     }
   };
 
@@ -238,8 +236,8 @@ export default function Cart() {
   return (
     <>
       <Header />
-      {/* ĐÃ THÊM: class="cart-page" */}
-      <Container className="cart-page mt-5 pt-5">
+      <main className="cart-page">
+        <Container className="mt-5 pt-5">
         <Row>
           <Col md={8}>
             {/* ĐÃ THAY ĐỔI: Thêm class="cart-items-container" */}
@@ -303,7 +301,8 @@ export default function Cart() {
             </Card>
           </Col>
         </Row>
-      </Container>
+        </Container>
+      </main>
       <Footer />
     </>
   );

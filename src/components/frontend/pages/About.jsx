@@ -56,9 +56,9 @@ const About = () => {
   ];
 
   return (
-    <div>
+    <>
       <Header />
-      <div style={{ paddingTop: '120px', minHeight: '100vh', position: 'relative' }}>
+      <main className="about-page" style={{ minHeight: '100vh', position: 'relative' }}>
         {/* Hero Section */}
         <section style={{
           background: 'linear-gradient(135deg, rgba(255, 249, 236, 0.8), rgba(255, 220, 204, 0.6))',
@@ -333,9 +333,9 @@ const About = () => {
             ))}
           </Row>
         </Container>
-      </div>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 };
 

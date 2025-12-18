@@ -202,15 +202,17 @@ export default function Orders() {
 
   if (authLoading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Đang tải...</span>
-          </div>
-        </Container>
+        <main className="orders-page">
+          <Container className="mt-5 pt-5" style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Đang tải...</span>
+            </div>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -219,9 +221,10 @@ export default function Orders() {
   }
 
   return (
-    <div className="orders-page">
+    <>
       <Header />
-      <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
+      <main className="orders-page">
+        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
         <div className="orders-header">
           <h1 style={{ 
             color: '#5D2A42', 
@@ -424,61 +427,62 @@ export default function Orders() {
             </div>
           )}
         </div>
-      </Container>
-      <Footer />
 
-      {/* Modal hủy đơn hàng */}
-      <Modal show={showCancelModal} onHide={handleCloseCancelModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title style={{ color: '#5D2A42', fontWeight: 600 }}>
-            Hủy đơn hàng
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p style={{ marginBottom: '1rem', color: '#666' }}>
-            Bạn có chắc chắn muốn hủy đơn hàng này? Vui lòng nhập lý do hủy đơn hàng.
-          </p>
-          <Form.Group className="mb-3">
-            <Form.Label style={{ fontWeight: 600, color: '#5D2A42' }}>
-              Lý do hủy đơn hàng <span style={{ color: '#dc3545' }}>*</span>
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={4}
-              placeholder="Ví dụ: Thay đổi ý định, Đặt nhầm sản phẩm, Không còn nhu cầu..."
-              value={cancelReason}
-              onChange={(e) => setCancelReason(e.target.value)}
-              style={{
-                borderRadius: '8px',
-                border: '1px solid #ddd',
-                resize: 'vertical'
-              }}
-              maxLength={500}
-            />
-            <Form.Text className="text-muted" style={{ fontSize: '0.85rem' }}>
-              {cancelReason.length}/500 ký tự
-            </Form.Text>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button 
-            variant="secondary" 
-            onClick={handleCloseCancelModal}
-            style={{ borderRadius: '8px' }}
-          >
-            Hủy
-          </Button>
-          <Button 
-            variant="danger" 
-            onClick={handleConfirmCancel}
-            disabled={!cancelReason.trim() || cancellingOrderId === orderToCancel}
-            style={{ borderRadius: '8px' }}
-          >
-            {cancellingOrderId === orderToCancel ? 'Đang hủy...' : 'Xác nhận hủy đơn'}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        {/* Modal hủy đơn hàng */}
+        <Modal show={showCancelModal} onHide={handleCloseCancelModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: '#5D2A42', fontWeight: 600 }}>
+              Hủy đơn hàng
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p style={{ marginBottom: '1rem', color: '#666' }}>
+              Bạn có chắc chắn muốn hủy đơn hàng này? Vui lòng nhập lý do hủy đơn hàng.
+            </p>
+            <Form.Group className="mb-3">
+              <Form.Label style={{ fontWeight: 600, color: '#5D2A42' }}>
+                Lý do hủy đơn hàng <span style={{ color: '#dc3545' }}>*</span>
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                placeholder="Ví dụ: Thay đổi ý định, Đặt nhầm sản phẩm, Không còn nhu cầu..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                style={{
+                  borderRadius: '8px',
+                  border: '1px solid #ddd',
+                  resize: 'vertical'
+                }}
+                maxLength={500}
+              />
+              <Form.Text className="text-muted" style={{ fontSize: '0.85rem' }}>
+                {cancelReason.length}/500 ký tự
+              </Form.Text>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button 
+              variant="secondary" 
+              onClick={handleCloseCancelModal}
+              style={{ borderRadius: '8px' }}
+            >
+              Hủy
+            </Button>
+            <Button 
+              variant="danger" 
+              onClick={handleConfirmCancel}
+              disabled={!cancelReason.trim() || cancellingOrderId === orderToCancel}
+              style={{ borderRadius: '8px' }}
+            >
+              {cancellingOrderId === orderToCancel ? 'Đang hủy...' : 'Xác nhận hủy đơn'}
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Container>
+      </main>
+      <Footer />
+    </>
   );
 }
 

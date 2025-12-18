@@ -158,24 +158,26 @@ export default function Preferences() {
 
   if (authLoading || loading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5">
-          <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '60vh', gap: '20px' }}>
-            <div className="loading-spinner" style={{ 
-              width: '60px', 
-              height: '60px', 
-              border: '5px solid rgba(251, 99, 118, 0.2)', 
-              borderTopColor: '#FB6376', 
-              borderRightColor: '#FCB1A6', 
-              borderRadius: '50%', 
-              animation: 'spin 1s linear infinite'
-            }}></div>
-            <p style={{ color: '#5D2A42', fontSize: '1rem', fontWeight: '500', margin: 0 }}>Đang tải...</p>
-          </div>
-        </Container>
+        <main className="preferences-page">
+          <Container className="mt-5 pt-5">
+            <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '60vh', gap: '20px' }}>
+              <div className="loading-spinner" style={{ 
+                width: '60px', 
+                height: '60px', 
+                border: '5px solid rgba(251, 99, 118, 0.2)', 
+                borderTopColor: '#FB6376', 
+                borderRightColor: '#FCB1A6', 
+                borderRadius: '50%', 
+                animation: 'spin 1s linear infinite'
+              }}></div>
+              <p style={{ color: '#5D2A42', fontSize: '1rem', fontWeight: '500', margin: 0 }}>Đang tải...</p>
+            </div>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -184,8 +186,9 @@ export default function Preferences() {
   }
 
   return (
-    <div>
+    <>
       <Header />
+      <main className="preferences-page">
       <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
         <div style={{
           marginBottom: '2.5rem',
@@ -559,9 +562,10 @@ export default function Preferences() {
             ))}
           </Row>
         )}
-      </Container>
+        </Container>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

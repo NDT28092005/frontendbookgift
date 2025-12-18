@@ -98,18 +98,20 @@ export default function AddAddress() {
   // Hiển thị loading khi đang kiểm tra authentication
   if (authLoading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
+        <main className="add-address-page">
+          <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-3" style={{ color: '#5D2A42' }}>Đang tải...</p>
             </div>
-            <p className="mt-3" style={{ color: '#5D2A42' }}>Đang tải...</p>
-          </div>
-        </Container>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -119,8 +121,9 @@ export default function AddAddress() {
   }
 
   return (
-    <div>
+    <>
       <Header />
+      <main className="add-address-page">
       <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
         <div style={{
           marginBottom: '2.5rem',
@@ -449,9 +452,10 @@ export default function AddAddress() {
             </div>
           </Form>
         </Card>
-      </Container>
+        </Container>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

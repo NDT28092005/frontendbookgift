@@ -304,9 +304,10 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container style={{ paddingTop: '180px', paddingBottom: '80px', minHeight: '70vh' }}>
+        <main className="product-detail-page">
+          <Container style={{ paddingBottom: '80px', minHeight: '70vh' }}>
           <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '60vh', gap: '20px' }}>
             <div className="loading-spinner" style={{ 
               width: '60px', 
@@ -329,17 +330,19 @@ export default function ProductDetail() {
             </div>
             <p style={{ color: '#5D2A42', fontSize: '1rem', fontWeight: '500', margin: 0 }}>Đang tải sản phẩm...</p>
           </div>
-        </Container>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
   if (!product) {
     return (
-      <div>
+      <>
         <Header />
-        <Container style={{ paddingTop: '180px', paddingBottom: '80px', minHeight: '70vh' }}>
+        <main className="product-detail-page">
+          <Container style={{ paddingBottom: '80px', minHeight: '70vh' }}>
           <Card style={{ padding: '3rem', textAlign: 'center' }}>
             <h2 style={{ color: '#5D2A42' }}>Không tìm thấy sản phẩm</h2>
             <Button onClick={() => navigate('/products')} style={{ marginTop: '1rem' }}>
@@ -347,9 +350,10 @@ export default function ProductDetail() {
               Quay lại danh sách
             </Button>
           </Card>
-        </Container>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -358,9 +362,10 @@ export default function ProductDetail() {
     : ['https://via.placeholder.com/600x600?text=No+Image'];
 
   return (
-    <div>
+    <>
       <Header />
-      <Container style={{ paddingTop: '180px', paddingBottom: '80px' }}>
+      <main className="product-detail-page">
+        <Container style={{ paddingBottom: '80px' }}>
         <Button 
           variant="outline-secondary" 
           onClick={() => navigate(-1)}
@@ -1428,9 +1433,10 @@ export default function ProductDetail() {
             </Col>
           </Row>
         )}
-      </Container>
+        </Container>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

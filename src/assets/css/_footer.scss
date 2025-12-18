@@ -6,6 +6,12 @@
     background: linear-gradient(180deg, rgba(93, 42, 66, 0.95), rgba(93, 42, 66, 0.98));
     color: white;
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    // Tách biệt hoàn toàn với header và content
+    display: block;
+    clear: both;
     
     .footer-brand {
         margin-bottom: 2rem;

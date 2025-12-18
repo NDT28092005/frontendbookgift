@@ -155,9 +155,10 @@ export default function Profile() {
   if (!user) return null;
 
   return (
-    <div>
+    <>
       <Header />
-      <div className="profile-container">
+      <main className="profile-container">
+        <div className="profile-container">
         <div className="profile-card">
           <div className="profile-header">
             <div className="profile-avatar" style={{ position: 'relative' }}>
@@ -558,7 +559,8 @@ export default function Profile() {
           </div>
         </div>
       )}
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }

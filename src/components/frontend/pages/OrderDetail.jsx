@@ -183,15 +183,17 @@ export default function OrderDetail() {
 
   if (authLoading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </Container>
+        <main className="order-detail-page">
+          <Container className="mt-5 pt-5" style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -201,46 +203,50 @@ export default function OrderDetail() {
 
   if (loading) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </Container>
+        <main className="order-detail-page">
+          <Container className="mt-5 pt-5" style={{ minHeight: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
   if (error || !order) {
     return (
-      <div>
+      <>
         <Header />
-        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
-          <Button
-            variant="outline-secondary"
-            onClick={() => navigate('/orders')}
-            style={{ marginBottom: '2rem' }}
-          >
-            <FaArrowLeft style={{ marginRight: '0.5rem' }} />
-            Quay lại
-          </Button>
-          <Card>
-            <Card.Body style={{ textAlign: 'center', padding: '3rem' }}>
-              <p style={{ color: '#dc3545', fontSize: '1.1rem' }}>{error || 'Không tìm thấy đơn hàng'}</p>
-              <Button 
-                variant="primary" 
-                onClick={() => navigate('/orders')}
-                style={{ marginTop: '1rem' }}
-              >
-                Quay về danh sách đơn hàng
-              </Button>
-            </Card.Body>
-          </Card>
-        </Container>
+        <main className="order-detail-page">
+          <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
+            <Button
+              variant="outline-secondary"
+              onClick={() => navigate('/orders')}
+              style={{ marginBottom: '2rem' }}
+            >
+              <FaArrowLeft style={{ marginRight: '0.5rem' }} />
+              Quay lại
+            </Button>
+            <Card>
+              <Card.Body style={{ textAlign: 'center', padding: '3rem' }}>
+                <p style={{ color: '#dc3545', fontSize: '1.1rem' }}>{error || 'Không tìm thấy đơn hàng'}</p>
+                <Button 
+                  variant="primary" 
+                  onClick={() => navigate('/orders')}
+                  style={{ marginTop: '1rem' }}
+                >
+                  Quay về danh sách đơn hàng
+                </Button>
+              </Card.Body>
+            </Card>
+          </Container>
+        </main>
         <Footer />
-      </div>
+      </>
     );
   }
 
@@ -355,9 +361,10 @@ export default function OrderDetail() {
   };
 
   return (
-    <div className="order-detail-page">
+    <>
       <Header />
-      <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
+      <main className="order-detail-page">
+        <Container className="mt-5 pt-5" style={{ minHeight: '70vh', paddingBottom: '4rem' }}>
         <Button
           variant="outline-secondary"
           onClick={() => navigate('/orders')}
@@ -740,9 +747,10 @@ export default function OrderDetail() {
             </Button>
           </Modal.Footer>
         </Modal>
-      </Container>
+        </Container>
+      </main>
       <Footer />
-    </div>
+    </>
   );
 }
 

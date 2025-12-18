@@ -39,6 +39,11 @@ body {
 }
 
 .cart-page {
+  // Padding-top is handled by global header styles
+  // Remove any conflicting padding
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  
   .card {
     border: 1px solid $border-1;
     border-radius: $border-radius;
@@ -219,7 +224,16 @@ body {
 ======================= */
 .order-summary {
   position: sticky;
-  top: 100px; // Adjust based on your header height
+  top: 140px; // Account for fixed header (120px) + some spacing
+  
+  @media (max-width: 991px) {
+    top: 120px;
+  }
+  
+  @media (max-width: 767px) {
+    top: 110px;
+    position: static; // Disable sticky on mobile
+  }
 
   .summary-details {
     .d-flex {
