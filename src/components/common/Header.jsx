@@ -2,24 +2,17 @@ import React, { useEffect, useState, useContext } from 'react'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { useNavigate, Link } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { FaSearch, FaUser, FaSignInAlt, FaShoppingCart, FaShoppingBag, FaStar } from "react-icons/fa";
 import { AuthContext } from '../../context/AuthContext.js';
-import { getCategories } from '../../api/category';
-import { getOccasions } from '../../api/occasion';
-import axios from 'axios';
+
 
 const Header = () => {
     const navigate = useNavigate();
     const { user, setUser, setToken } = useContext(AuthContext);
     const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
     const [scrolled, setScrolled] = useState(false);
-    const [categories, setCategories] = useState([]);
-    const [occasions, setOccasions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     
     useEffect(() => {
@@ -33,23 +26,6 @@ const Header = () => {
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
-
-    useEffect(() => {
-        fetchCategoriesAndOccasions();
-    }, []);
-
-    const fetchCategoriesAndOccasions = async () => {
-        try {
-            const [categoriesRes, occasionsRes] = await Promise.all([
-                getCategories(),
-                getOccasions()
-            ]);
-            setCategories(categoriesRes.data || []);
-            setOccasions(occasionsRes.data || []);
-        } catch (error) {
-            console.error('Error fetching categories/occasions:', error);
-        }
-    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -145,21 +121,7 @@ const Header = () => {
                                     Tất cả sản phẩm
                                 </Nav.Link>
                                 
-                                {/* Occasions từ database */}
-                                {occasions.slice(0, 2).map((occasion) => (
-                                    <Nav.Link
-                                        key={occasion.id}
-                                        as={Link}
-                                        to={`/products?occasion_id=${occasion.id}`}
-                                        className="nav-link"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            navigate(`/products?occasion_id=${occasion.id}`);
-                                        }}
-                                    >
-                                        {occasion.name}
-                                    </Nav.Link>
-                                ))}
+                                
                                 
                                 <Nav.Link 
                                     as={Link} 
