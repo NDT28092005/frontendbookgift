@@ -50,7 +50,7 @@ const AdminLayout = ({ children }) => {
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="admin-sidebar-header">
           <div className="admin-logo">
-            <span className="admin-logo-text">GiftShop</span>
+            <span className="admin-logo-text">Bloom & Box</span>
             <span className="admin-logo-subtitle">Admin Panel</span>
           </div>
           <button 

@@ -668,7 +668,7 @@
   right: 0;
   bottom: 0;
   z-index: 9999;
-  display: flex;
+  display: flex!important;
   justify-content: center;
   align-items: center;
   padding: 1rem;
@@ -1514,11 +1514,14 @@
   border: none;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 249, 236, 0.95));
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 550px;
-  width: 100%;
+  max-width: 900px;
+  width: 95%;
+  max-height: 90vh;
   margin: auto;
   animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .qr-modal-close-button {
@@ -1546,11 +1549,88 @@
 }
 
 .qr-modal-body {
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+// Content Wrapper - Horizontal Layout
+.qr-modal-content-wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  min-height: 0;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+// Left Side - QR Code
+.qr-modal-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// Right Side - Payment Info
+.qr-modal-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// Header Section
+.qr-modal-header-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  animation: fadeInDown 0.5s ease-out;
+  width: 100%;
+}
+
+.qr-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #FB6376, #FCB1A6);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 20px rgba(251, 99, 118, 0.3);
+  animation: pulse 2s infinite;
+
+  .qr-icon {
+    font-size: 2rem;
+    color: white;
+  }
+}
+
+.qr-modal-title {
+  color: #5D2A42;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.qr-modal-subtitle {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0;
+  text-align: center;
 }
 
 .payment-message-container {
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   margin-bottom: 2rem;
   border-radius: 20px;
   text-align: center;
@@ -1568,8 +1648,9 @@
 }
 
 .payment-message-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
+  animation: bounce 1s infinite;
 }
 
 .payment-message-text {
@@ -1586,106 +1667,345 @@
   }
 }
 
-.qr-modal-title {
-  color: #5D2A42;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  font-size: 1.5rem;
-  text-align: center;
-}
-
 .qr-code-container {
   text-align: center;
-  margin-bottom: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+  flex: 1;
+  min-height: 0;
 }
 
 .qr-code-wrapper {
+  position: relative;
   padding: 1.5rem;
-  background: white;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 249, 236, 0.9));
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  display: flex;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
+  border: 3px solid rgba(251, 99, 118, 0.2);
+  max-width: 100%;
+}
+
+.qr-code-border {
+  position: relative;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .qr-code-image {
-  width: 400px;
-  height: 400px;
-  max-width: calc(100vw - 4rem);
-  max-height: calc(70vh - 200px);
+  width: 280px;
+  height: 280px;
+  max-width: 100%;
+  max-height: calc(90vh - 300px);
   object-fit: contain;
-  border-radius: 15px;
-  border: 3px solid rgba(251, 99, 118, 0.2);
+  border-radius: 12px;
   background: white;
   display: block;
   margin: 0 auto;
-}
-
-.payment-info-container {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
-  padding: 2rem;
-  border: 2px solid rgba(251, 99, 118, 0.1);
-}
-
-.payment-info-section {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(251, 99, 118, 0.1);
-}
-
-.payment-info-label {
-  font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 0.75rem;
-  font-weight: 500;
-
-  strong {
-    color: #5D2A42;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+  @media (max-width: 768px) {
+    width: 250px;
+    height: 250px;
   }
 }
 
-.payment-info-value {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #FB6376;
-  word-break: break-word;
-  padding: 0.75rem;
-  background: rgba(251, 99, 118, 0.05);
-  border-radius: 10px;
+// QR Code Corner Decorations
+.qr-code-corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #FB6376;
+  z-index: 1;
+
+  &.qr-code-corner-tl {
+    top: 0.5rem;
+    left: 0.5rem;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 10px;
+  }
+
+  &.qr-code-corner-tr {
+    top: 0.5rem;
+    right: 0.5rem;
+    border-left: none;
+    border-bottom: none;
+    border-top-right-radius: 10px;
+  }
+
+  &.qr-code-corner-bl {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    border-right: none;
+    border-top: none;
+    border-bottom-left-radius: 10px;
+  }
+
+  &.qr-code-corner-br {
+    bottom: 0.5rem;
+    right: 0.5rem;
+    border-left: none;
+    border-top: none;
+    border-bottom-right-radius: 10px;
+  }
 }
 
-.payment-info-amount {
-  font-size: 1.8rem;
+.payment-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+  height: 100%;
+  justify-content: space-between;
+}
+
+// Payment Amount Card
+.payment-amount-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(251, 99, 118, 0.1), rgba(252, 177, 166, 0.1));
+  border-radius: 15px;
+  border: 2px solid rgba(251, 99, 118, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(251, 99, 118, 0.2);
+  }
+}
+
+.payment-amount-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #FB6376, #FCB1A6);
+  border-radius: 12px;
+  color: white;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(251, 99, 118, 0.3);
+}
+
+.payment-amount-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.payment-amount-label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+
+.payment-amount-value {
+  font-size: 1.6rem;
   font-weight: 700;
   background: linear-gradient(135deg, #FB6376, #FCB1A6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+// Transfer Content Card
+.payment-transfer-card {
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  border: 2px solid rgba(251, 99, 118, 0.15);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(251, 99, 118, 0.3);
+    box-shadow: 0 4px 15px rgba(251, 99, 118, 0.1);
+  }
+}
+
+.payment-transfer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.payment-transfer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(251, 99, 118, 0.1);
+  border-radius: 10px;
+  color: #FB6376;
+  font-size: 1.25rem;
+}
+
+.payment-transfer-label {
+  font-size: 0.95rem;
+  color: #5D2A42;
+  font-weight: 600;
+}
+
+.payment-transfer-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(251, 99, 118, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(251, 99, 118, 0.1);
+}
+
+.payment-transfer-content {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #FB6376;
+  word-break: break-word;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.payment-transfer-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #FB6376, #FCB1A6);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(251, 99, 118, 0.4);
+    background: linear-gradient(135deg, #FCB1A6, #FB6376);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  svg {
+    font-size: 0.9rem;
+  }
+}
+
+// Status Badge
+.payment-status-wrapper {
   text-align: center;
+  margin-top: 0.5rem;
 }
 
 .payment-status-badge {
   font-size: 1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.75rem;
   border-radius: 25px;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.countdown-timer {
-  margin-top: 1.5rem;
-  text-align: center;
-  color: #666;
-  font-size: 0.9rem;
+// Countdown Timer Card
+.countdown-timer-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 235, 59, 0.1));
+  border-radius: 15px;
+  border: 2px solid rgba(255, 193, 7, 0.3);
+  animation: pulse 2s infinite;
+}
 
-  strong {
-    color: #FB6376;
+.countdown-icon {
+  font-size: 1.5rem;
+  color: #ffc107;
+  flex-shrink: 0;
+}
+
+.countdown-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.countdown-label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.2rem;
+  font-weight: 500;
+}
+
+.countdown-time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffc107;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+// Animations
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }
 

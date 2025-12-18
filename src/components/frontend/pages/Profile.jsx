@@ -20,7 +20,7 @@ import {
 } from 'react-icons/fa';
 
 export default function Profile() {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser, refreshUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -92,7 +92,12 @@ export default function Profile() {
         }
       );
       setAvatarPreview(`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/storage/${res.data.avatar}`);
+      // Cập nhật user trong context để Header cũng cập nhật
       setUser({ ...user, avatar: res.data.avatar });
+      // Refresh user từ API để đảm bảo dữ liệu đồng bộ
+      if (refreshUser) {
+        await refreshUser();
+      }
       setMessage('✅ Ảnh đại diện đã được cập nhật!');
       setTimeout(() => setMessage(''), 3000);
     } catch (err) {
@@ -119,6 +124,10 @@ export default function Profile() {
       );
 
       setUser(res.data);
+      // Refresh user từ API để đảm bảo dữ liệu đồng bộ với Header
+      if (refreshUser) {
+        await refreshUser();
+      }
       setMessage('✅ Cập nhật thông tin thành công!');
       setEditing(false);
       setTimeout(() => setMessage(''), 3000);

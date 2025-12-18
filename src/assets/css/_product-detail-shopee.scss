@@ -1,0 +1,631 @@
+// Shopee-style Product Detail Page
+.product-detail-shopee {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  background: #f5f5f5;
+  min-height: 100vh;
+
+  // Breadcrumb
+  .breadcrumb-nav {
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.65);
+    padding-top: 20px;
+    a {
+      color: rgba(0, 0, 0, 0.65);
+      text-decoration: none;
+      transition: color 0.2s;
+      
+      &:hover {
+        color: #FB6376;
+      }
+    }
+  }
+
+  // Main Product Section
+  .product-main-section {
+    background: #fff;
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13);
+  }
+
+  // Image Gallery - Shopee Style
+  .product-image-gallery {
+    position: relative;
+
+    .image-thumbnails {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      width: 80px;
+      margin-right: 1rem;
+      max-height: 500px;
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 2px;
+
+        &:hover {
+          background: #a8a8a8;
+        }
+      }
+
+      .thumbnail-item {
+        width: 80px;
+        height: 80px;
+        border: 2px solid transparent;
+        border-radius: 2px;
+        overflow: hidden;
+        cursor: pointer;
+        background: #fff;
+        transition: all 0.2s;
+        position: relative;
+
+        &.active {
+          border-color: #FB6376;
+        }
+
+        &:hover {
+          border-color: #FB6376;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .main-image-container {
+      flex: 1;
+      position: relative;
+      background: #fff;
+      border-radius: 2px;
+      overflow: hidden;
+
+      .main-image-wrapper {
+        width: 100%;
+        padding-top: 100%;
+        position: relative;
+        background: #fff;
+        cursor: zoom-in;
+
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          transition: transform 0.3s;
+        }
+
+        &:hover img {
+          transform: scale(1.1);
+        }
+      }
+
+      // Zoom lens
+      .zoom-lens {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        background: rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+        display: none;
+        z-index: 10;
+      }
+
+      // Zoom result
+      .zoom-result {
+        position: absolute;
+        top: 0;
+        left: calc(100% + 20px);
+        width: 500px;
+        height: 500px;
+        border: 1px solid #d4d4d4;
+        background: #fff;
+        display: none;
+        overflow: hidden;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+        img {
+          position: absolute;
+          width: 200%;
+          height: 200%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  // Product Info - Shopee Style
+  .product-info-shopee {
+    padding-left: 2rem;
+
+    .product-name {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #212121;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+
+    .product-rating-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+      margin-bottom: 1rem;
+
+      .rating-stars {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        background: #fff3cd;
+        border-radius: 4px;
+
+        .star {
+          color: #ffc107;
+          font-size: 0.875rem;
+        }
+      }
+
+      .rating-text {
+        font-size: 0.875rem;
+        color: #757575;
+        margin-left: 0.5rem;
+      }
+
+      .sold-count {
+        font-size: 0.875rem;
+        color: #757575;
+        padding-left: 1rem;
+        border-left: 1px solid rgba(0, 0, 0, 0.14);
+      }
+    }
+
+    .product-price-section {
+      background: #fafafa;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+
+      .current-price {
+        font-size: 2rem;
+        font-weight: 500;
+        color: #FB6376;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+
+        .currency {
+          font-size: 0.75em;
+          text-decoration: underline;
+        }
+      }
+
+      .original-price {
+        font-size: 1rem;
+        color: #929292;
+        text-decoration: line-through;
+        margin-right: 0.75rem;
+      }
+
+      .discount-badge {
+        display: inline-block;
+        background: #FB6376;
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.125rem 0.375rem;
+        border-radius: 2px;
+        margin-left: 0.5rem;
+      }
+    }
+
+    .product-variants {
+      margin-bottom: 1.5rem;
+
+      .variant-label {
+        font-size: 0.875rem;
+        color: #757575;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .required {
+          color: #FB6376;
+        }
+      }
+
+      .variant-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
+
+    .quantity-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+
+      .quantity-label {
+        font-size: 0.875rem;
+        color: #757575;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(0, 0, 0, 0.09);
+        border-radius: 2px;
+
+        button {
+          width: 32px;
+          height: 32px;
+          border: none;
+          background: #fff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.25rem;
+          color: #757575;
+          transition: all 0.2s;
+
+          &:hover:not(:disabled) {
+            background: #f5f5f5;
+            color: #FB6376;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        .quantity-value {
+          width: 50px;
+          height: 32px;
+          border-left: 1px solid rgba(0, 0, 0, 0.09);
+          border-right: 1px solid rgba(0, 0, 0, 0.09);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          color: #212121;
+        }
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      .btn-add-cart {
+        flex: 1;
+        height: 48px;
+        background: rgba(251, 99, 118, 0.1);
+        border: 1px solid #FB6376;
+        color: #FB6376;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+        cursor: pointer;
+
+        &:hover {
+          background: rgba(251, 99, 118, 0.15);
+        }
+
+        svg {
+          font-size: 1rem;
+        }
+      }
+
+      .btn-buy-now {
+        flex: 1;
+        height: 48px;
+        background: #FB6376;
+        border: none;
+        color: #fff;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 2px;
+        transition: all 0.2s;
+        cursor: pointer;
+
+        &:hover {
+          background: #FCB1A6;
+        }
+      }
+    }
+
+    .product-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.09);
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #757575;
+
+        svg {
+          color: #FB6376;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  // Product Description Tabs - Shopee Style
+  .product-tabs-section {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13);
+    margin-bottom: 1.5rem;
+
+    .tabs-header {
+      display: flex;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+      background: #fff;
+
+      .tab-item {
+        padding: 1.25rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.8);
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+
+        &.active {
+          color: #FB6376;
+          border-bottom-color: #FB6376;
+        }
+
+        &:hover:not(.active) {
+          color: #FB6376;
+        }
+      }
+    }
+
+    .tabs-content {
+      padding: 2rem;
+      min-height: 300px;
+
+      .product-description {
+        color: rgba(0, 0, 0, 0.87);
+        line-height: 1.8;
+        white-space: pre-line;
+        font-size: 0.875rem;
+      }
+
+      .reviews-section {
+        .reviews-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1.5rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+
+          .reviews-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.87);
+          }
+        }
+
+        .review-card {
+          padding: 1rem 0;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .review-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+
+            .reviewer-avatar {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              background: #FB6376;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: #fff;
+              font-weight: 500;
+            }
+
+            .reviewer-info {
+              flex: 1;
+
+              .reviewer-name {
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: rgba(0, 0, 0, 0.87);
+                margin-bottom: 0.25rem;
+              }
+
+              .review-date {
+                font-size: 0.75rem;
+                color: rgba(0, 0, 0, 0.54);
+              }
+            }
+
+            .review-rating {
+              display: flex;
+              gap: 0.125rem;
+            }
+          }
+
+          .review-comment {
+            font-size: 0.875rem;
+            color: rgba(0, 0, 0, 0.87);
+            line-height: 1.6;
+            margin-top: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  // Related Products - Shopee Style
+  .related-products-section {
+    background: #fff;
+    border-radius: 4px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.13);
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.87);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+    }
+
+    .related-products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+
+      .product-card {
+        background: #fff;
+        border-radius: 4px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          border-color: #FB6376;
+        }
+
+        .product-image {
+          width: 100%;
+          padding-top: 100%;
+          position: relative;
+          background: #fff;
+          overflow: hidden;
+
+          img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+          }
+
+          &:hover img {
+            transform: scale(1.05);
+          }
+        }
+
+        .product-info {
+          padding: 0.75rem;
+
+          .product-name {
+            font-size: 0.875rem;
+            color: rgba(0, 0, 0, 0.87);
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .product-price {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #FB6376;
+            margin-bottom: 0.25rem;
+          }
+
+          .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: rgba(0, 0, 0, 0.54);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .product-detail-shopee {
+    .product-image-gallery {
+      .image-thumbnails {
+        flex-direction: row;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1rem;
+        max-height: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+    }
+
+    .product-info-shopee {
+      padding-left: 0;
+      margin-top: 1.5rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+
+      .btn-add-cart,
+      .btn-buy-now {
+        width: 100%;
+      }
+    }
+  }
+}

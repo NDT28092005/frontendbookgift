@@ -11,6 +11,7 @@ const AdminOrders = () => {
   const [openDetail, setOpenDetail] = useState(false);
   const [importFile, setImportFile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [creatingGhtk, setCreatingGhtk] = useState({});
 
   const fetchOrders = async () => {
     try {
@@ -52,6 +53,95 @@ const AdminOrders = () => {
     } catch (err) {
       console.error(err);
       alert("Không thể cập nhật trạng thái");
+    }
+  };
+
+  const handleCreateGhtkOrder = async (orderId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Vui lòng đăng nhập lại");
+      return;
+    }
+
+    setCreatingGhtk(prev => ({ ...prev, [orderId]: true }));
+    try {
+      const response = await axios.post(
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${orderId}/create-ghtk-order`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (response.data?.already_exists) {
+        alert("Đơn hàng đã có đơn GHTK rồi!");
+      } else {
+        alert("✅ Tạo đơn GHTK thành công!\n\nMã vận đơn: " + (response.data?.tracking_code || 'Đang xử lý...'));
+      }
+      
+      fetchOrders();
+    } catch (err) {
+      console.error("Error creating GHTK order:", err);
+      
+      let errorMessage = "Lỗi khi tạo đơn GHTK";
+      
+      if (err.response?.data) {
+        const errorData = err.response.data;
+        
+        // Nếu có errors array (validation errors)
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+          errorMessage = "Dữ liệu đơn hàng không đầy đủ:\n" + errorData.errors.join("\n");
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+          // Nếu có error detail, thêm vào
+          if (errorData.error) {
+            errorMessage += "\n\nChi tiết: " + errorData.error;
+          }
+        }
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      alert("❌ " + errorMessage);
+    } finally {
+      setCreatingGhtk(prev => ({ ...prev, [orderId]: false }));
+    }
+  };
+
+  const handleDownloadLabel = async (orderId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Vui lòng đăng nhập lại");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${orderId}/print-label`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: 'blob' // Quan trọng: để nhận file PDF
+        }
+      );
+
+      // Tạo URL từ blob và download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `label_order_${orderId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error downloading label:", err);
+      const errorMessage = err.response?.data?.message || err.message || "Lỗi khi tải nhãn";
+      alert("❌ " + errorMessage);
     }
   };
 
@@ -305,6 +395,8 @@ const AdminOrders = () => {
                     <th>User Email</th>
                     <th>Total Amount</th>
                     <th>Status</th>
+                    <th>Print Label</th>
+                    <th>Tracking Code</th>
                     <th>Created At</th>
                     <th>Actions</th>
                   </tr>
@@ -332,13 +424,56 @@ const AdminOrders = () => {
                               {order.status || 'pending'}
                             </span>
                           </td>
+                          <td>
+                            {order.print_label ? (
+                              <span style={{
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '15px',
+                                fontSize: '0.85rem',
+                                background: 'rgba(0, 123, 255, 0.1)',
+                                color: '#007bff',
+                                fontWeight: '500'
+                              }}>
+                                ✓ Có
+                              </span>
+                            ) : (
+                              <span style={{
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '15px',
+                                fontSize: '0.85rem',
+                                background: 'rgba(108, 117, 125, 0.1)',
+                                color: '#6c757d',
+                                fontWeight: '500'
+                              }}>
+                                ✗ Không
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {order.tracking_code ? (
+                              <span style={{
+                                padding: '0.25rem 0.75rem',
+                                borderRadius: '15px',
+                                fontSize: '0.85rem',
+                                background: 'rgba(40, 167, 69, 0.1)',
+                                color: '#28a745',
+                                fontWeight: '500',
+                                fontFamily: 'monospace'
+                              }}>
+                                {order.tracking_code}
+                              </span>
+                            ) : (
+                              <span style={{ color: '#999', fontStyle: 'italic' }}>Chưa có</span>
+                            )}
+                          </td>
                           <td>{formatDate(order.created_at)}</td>
                           <td>
-                            <div className="d-flex gap-2 align-items-center">
+                            <div className="d-flex gap-2 align-items-center flex-wrap">
                               <button
                                 onClick={() => handleOpenDetail(order)}
                                 className="admin-btn"
                                 style={{ 
+                                  width: '100%',
                                   padding: '0.5rem 1rem',
                                   background: 'transparent',
                                   color: '#007bff',
@@ -350,6 +485,67 @@ const AdminOrders = () => {
                               >
                                 CHI TIẾT
                               </button>
+                              
+                              {/* Nút Yêu cầu giao hàng */}
+                              {order.status === 'paid' && !order.tracking_code && (
+                                <button
+                                  onClick={() => handleCreateGhtkOrder(order.id)}
+                                  disabled={creatingGhtk[order.id]}
+                                  className="admin-btn"
+                                  style={{ 
+                                    width: '100%',
+                                    padding: '0.5rem 1rem',
+                                    background: creatingGhtk[order.id] ? '#6c757d' : '#28a745',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    fontSize: '0.9rem',
+                                    fontWeight: '500',
+                                    cursor: creatingGhtk[order.id] ? 'not-allowed' : 'pointer',
+                                    opacity: creatingGhtk[order.id] ? 0.6 : 1
+                                  }}
+                                >
+                                  {creatingGhtk[order.id] ? 'Đang xử lý...' : '🚚 Yêu cầu giao hàng'}
+                                </button>
+                              )}
+                              
+                              {order.tracking_code && (
+                                <span style={{
+                                  padding: '0.25rem 0.75rem',
+                                  borderRadius: '15px',
+                                  fontSize: '0.85rem',
+                                  background: 'rgba(40, 167, 69, 0.1)',
+                                  color: '#28a745',
+                                  fontWeight: '500'
+                                }}>
+                                  ✓ Đã tạo GHTK
+                                </span>
+                              )}
+
+                              {/* Nút Download Label - chỉ hiển thị khi print_label = 1 và có tracking_code */}
+                              {order.print_label && order.tracking_code && (
+                                <button
+                                  onClick={() => handleDownloadLabel(order.id)}
+                                  className="admin-btn"
+                                  style={{ 
+                                    padding: '0.5rem 1rem',
+                                    background: '#17a2b8',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    fontSize: '0.9rem',
+                                    fontWeight: '500',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem'
+                                  }}
+                                  title="Tải nhãn đơn hàng"
+                                >
+                                  <Download size={16} />
+                                  Download Label
+                                </button>
+                              )}
+
                               <select
                                 value={order.status}
                                 onChange={(e) => handleChangeStatus(order.id, e.target.value)}
@@ -376,7 +572,7 @@ const AdminOrders = () => {
                     })
                   ) : (
                     <tr>
-                      <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
+                      <td colSpan={8} style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
                         Không có đơn hàng nào
                       </td>
                     </tr>
@@ -455,6 +651,99 @@ const AdminOrders = () => {
                     {selectedOrder.status}
                   </span>
                 </p>
+                <p style={{ marginBottom: '0.5rem', color: '#666' }}>
+                  <strong style={{ color: '#5D2A42' }}>Print Label:</strong>{' '}
+                  {selectedOrder.print_label ? (
+                    <span style={{
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '15px',
+                      fontSize: '0.85rem',
+                      background: 'rgba(0, 123, 255, 0.1)',
+                      color: '#007bff',
+                      fontWeight: '500'
+                    }}>
+                      ✓ Có
+                    </span>
+                  ) : (
+                    <span style={{
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '15px',
+                      fontSize: '0.85rem',
+                      background: 'rgba(108, 117, 125, 0.1)',
+                      color: '#6c757d',
+                      fontWeight: '500'
+                    }}>
+                      ✗ Không
+                    </span>
+                  )}
+                </p>
+                <p style={{ marginBottom: '0.5rem', color: '#666' }}>
+                  <strong style={{ color: '#5D2A42' }}>Mã vận đơn:</strong>{' '}
+                  {selectedOrder.tracking_code ? (
+                    <span style={{
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '15px',
+                      fontSize: '0.85rem',
+                      background: 'rgba(40, 167, 69, 0.1)',
+                      color: '#28a745',
+                      fontWeight: '500',
+                      fontFamily: 'monospace'
+                    }}>
+                      {selectedOrder.tracking_code}
+                    </span>
+                  ) : (
+                    <span style={{ color: '#999', fontStyle: 'italic' }}>Chưa có</span>
+                  )}
+                </p>
+                <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  {selectedOrder.status === 'paid' && !selectedOrder.tracking_code && (
+                    <button
+                      onClick={() => {
+                        handleCreateGhtkOrder(selectedOrder.id);
+                        handleCloseDetail();
+                      }}
+                      disabled={creatingGhtk[selectedOrder.id]}
+                      className="admin-btn"
+                      style={{ 
+                        padding: '0.75rem 1.5rem',
+                        background: creatingGhtk[selectedOrder.id] ? '#6c757d' : '#28a745',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        fontWeight: '500',
+                        cursor: creatingGhtk[selectedOrder.id] ? 'not-allowed' : 'pointer',
+                        opacity: creatingGhtk[selectedOrder.id] ? 0.6 : 1
+                      }}
+                    >
+                      {creatingGhtk[selectedOrder.id] ? 'Đang xử lý...' : '🚚 Yêu cầu giao hàng'}
+                    </button>
+                  )}
+                  
+                  {/* Nút Download Label trong modal */}
+                  {selectedOrder.print_label && selectedOrder.tracking_code && (
+                    <button
+                      onClick={() => handleDownloadLabel(selectedOrder.id)}
+                      className="admin-btn"
+                      style={{ 
+                        padding: '0.75rem 1.5rem',
+                        background: '#17a2b8',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '1rem',
+                        fontWeight: '500',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                      title="Tải nhãn đơn hàng"
+                    >
+                      <Download size={18} />
+                      Download Label
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Tùy chọn quà tặng */}

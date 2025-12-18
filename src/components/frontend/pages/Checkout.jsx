@@ -11,7 +11,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Badge from "react-bootstrap/Badge";
-import { FaCheckCircle, FaClock, FaTimesCircle, FaArrowLeft, FaCreditCard, FaMapMarkerAlt, FaPlus, FaStar, FaEdit, FaTrash } from "react-icons/fa";
+import { FaCheckCircle, FaClock, FaTimesCircle, FaArrowLeft, FaCreditCard, FaMapMarkerAlt, FaPlus, FaStar, FaEdit, FaTrash, FaQrcode, FaCopy, FaMobileAlt, FaWallet } from "react-icons/fa";
 import '../../../assets/css/_checkout.scss';
 
 export default function Checkout() {
@@ -74,6 +74,7 @@ export default function Checkout() {
   const [giftPreview, setGiftPreview] = useState(null);
   const [generatingPreview, setGeneratingPreview] = useState(false);
   const [previewError, setPreviewError] = useState(null);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -683,6 +684,11 @@ export default function Checkout() {
 
   // Poll Google Sheet
   const checkPaymentFromGoogleAPI = async () => {
+    // Ngăn chặn xử lý đồng thời và kiểm tra nếu đã thanh toán
+    if (isProcessingPayment || paymentStatus === "paid" || !orderId) {
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://script.google.com/macros/s/AKfycbyjHTm8gtq_qPG_GUEV970kCuAFuhGd3dlEqqPjK-zsvUssBzdeOuc0si8BjVx31nj9/exec"
@@ -695,12 +701,13 @@ export default function Checkout() {
       const amountFromAPI = Number(latestTx["Giá trị"]) || 0;
 
       if (description.includes(transferContent) && amountFromAPI >= amount) {
+        setIsProcessingPayment(true);
         const currentToken = token || localStorage.getItem("token");
 
         // ✅ Gọi API markPaid để cập nhật trạng thái đơn hàng và giảm tồn kho
         if (orderId) {
           try {
-            await axios.post(
+            const markPaidResponse = await axios.post(
               "https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/mark-paid",
               { order_id: orderId },
               {
@@ -710,11 +717,48 @@ export default function Checkout() {
                 },
               }
             );
-            console.log("✅ Đã cập nhật trạng thái đơn hàng thành paid và giảm tồn kho");
+            
+            // Kiểm tra nếu đơn hàng đã được thanh toán trước đó (idempotent)
+            if (markPaidResponse.data?.already_paid) {
+              console.log("✅ Đơn hàng đã được thanh toán trước đó");
+            } else {
+              console.log("✅ Đã cập nhật trạng thái đơn hàng thành paid và giảm tồn kho");
+            }
           } catch (markPaidError) {
-            console.error("❌ Lỗi khi cập nhật trạng thái đơn hàng:", markPaidError);
-            // Vẫn hiển thị thông báo thành công cho người dùng
-            // Admin có thể cập nhật thủ công sau
+            // Xử lý lỗi 400 - có thể do đơn hàng đã được thanh toán
+            if (markPaidError.response?.status === 400) {
+              const errorMessage = markPaidError.response?.data?.message || "Đơn hàng không thể cập nhật";
+              console.warn("⚠️ Lỗi khi cập nhật đơn hàng (có thể đã được xử lý):", errorMessage);
+              
+              // Kiểm tra lại trạng thái đơn hàng
+              try {
+                const orderCheck = await axios.get(
+                  `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/api/orders/${orderId}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${currentToken}`,
+                    },
+                  }
+                );
+                
+                if (orderCheck.data?.status === 'paid') {
+                  console.log("✅ Đơn hàng đã được thanh toán, tiếp tục quy trình...");
+                  // Tiếp tục quy trình như bình thường
+                } else {
+                  console.error("❌ Đơn hàng chưa được thanh toán, lỗi:", errorMessage);
+                  setIsProcessingPayment(false);
+                  return;
+                }
+              } catch (checkError) {
+                console.error("❌ Không thể kiểm tra trạng thái đơn hàng:", checkError);
+                setIsProcessingPayment(false);
+                return;
+              }
+            } else {
+              console.error("❌ Lỗi khi cập nhật trạng thái đơn hàng:", markPaidError);
+              setIsProcessingPayment(false);
+              return;
+            }
           }
         }
 
@@ -738,6 +782,7 @@ export default function Checkout() {
           },
         });
 
+        // Dừng polling
         if (pollRef.current) {
           clearInterval(pollRef.current);
           pollRef.current = null;
@@ -752,6 +797,7 @@ export default function Checkout() {
       }
     } catch (error) {
       console.error("❌ Lỗi khi kiểm tra thanh toán:", error);
+      setIsProcessingPayment(false);
     }
   };
 
@@ -1329,6 +1375,60 @@ export default function Checkout() {
                       </span>
                     </div>
                   )}
+                  {/* Giá phụ kiện */}
+                  {(() => {
+                    let giftOptionsTotal = 0;
+                    const giftOptionsItems = [];
+                    
+                    if (wrappingPaperId) {
+                      const selectedPaper = wrappingPapers.find(p => p.id === parseInt(wrappingPaperId));
+                      if (selectedPaper && selectedPaper.price) {
+                        giftOptionsTotal += parseFloat(selectedPaper.price) || 0;
+                        giftOptionsItems.push({
+                          name: selectedPaper.name,
+                          price: parseFloat(selectedPaper.price) || 0
+                        });
+                      }
+                    }
+                    
+                    if (decorativeAccessoryId) {
+                      const selectedAccessory = decorativeAccessoriesList.find(a => a.id === parseInt(decorativeAccessoryId));
+                      if (selectedAccessory && selectedAccessory.price) {
+                        giftOptionsTotal += parseFloat(selectedAccessory.price) || 0;
+                        giftOptionsItems.push({
+                          name: selectedAccessory.name,
+                          price: parseFloat(selectedAccessory.price) || 0
+                        });
+                      }
+                    }
+                    
+                    if (cardTypeId) {
+                      const selectedCard = cardTypes.find(c => c.id === parseInt(cardTypeId));
+                      if (selectedCard && selectedCard.price) {
+                        giftOptionsTotal += parseFloat(selectedCard.price) || 0;
+                        giftOptionsItems.push({
+                          name: selectedCard.name,
+                          price: parseFloat(selectedCard.price) || 0
+                        });
+                      }
+                    }
+                    
+                    if (giftOptionsTotal > 0) {
+                      return (
+                        <>
+                          {giftOptionsItems.map((item, index) => (
+                            <div key={index} className="price-row price-row-gift-option">
+                              <span className="price-label">{item.name}:</span>
+                              <span className="price-value">
+                                {formatPrice(item.price)}
+                              </span>
+                            </div>
+                          ))}
+                        </>
+                      );
+                    }
+                    return null;
+                  })()}
                   <div className="price-row price-row-shipping">
                     <span className="price-label">Phí vận chuyển:</span>
                     <span className="price-value">
@@ -1347,7 +1447,31 @@ export default function Checkout() {
                       Tổng cộng:
                     </span>
                     <span className="price-total-value">
-                      {formatPrice(Math.max(0, (cart?.total_amount || 0) - (loyaltyPointsUsed * 100) + shippingFee))}
+                      {formatPrice(Math.max(0, (() => {
+                        let total = (cart?.total_amount || 0) - (loyaltyPointsUsed * 100) + shippingFee;
+                        
+                        // Cộng giá phụ kiện
+                        if (wrappingPaperId) {
+                          const selectedPaper = wrappingPapers.find(p => p.id === parseInt(wrappingPaperId));
+                          if (selectedPaper && selectedPaper.price) {
+                            total += parseFloat(selectedPaper.price) || 0;
+                          }
+                        }
+                        if (decorativeAccessoryId) {
+                          const selectedAccessory = decorativeAccessoriesList.find(a => a.id === parseInt(decorativeAccessoryId));
+                          if (selectedAccessory && selectedAccessory.price) {
+                            total += parseFloat(selectedAccessory.price) || 0;
+                          }
+                        }
+                        if (cardTypeId) {
+                          const selectedCard = cardTypes.find(c => c.id === parseInt(cardTypeId));
+                          if (selectedCard && selectedCard.price) {
+                            total += parseFloat(selectedCard.price) || 0;
+                          }
+                        }
+                        
+                        return total;
+                      })()))}
                     </span>
                   </div>
                 </div>
@@ -1424,55 +1548,126 @@ export default function Checkout() {
                     )}
 
                     {!paymentMessage && (
-                      <>
-                        <h3 className="qr-modal-title">
-                          Quét mã VietQR để thanh toán
-                        </h3>
+                      <div className="qr-modal-content-wrapper">
+                        {/* Left Side - QR Code */}
+                        <div className="qr-modal-left">
+                          <div className="qr-modal-header-section">
+                            <div className="qr-icon-wrapper">
+                              <FaQrcode className="qr-icon" />
+                            </div>
+                            <h3 className="qr-modal-title">
+                              Quét mã QR để thanh toán
+                            </h3>
+                            <p className="qr-modal-subtitle">
+                              Mở ứng dụng ngân hàng và quét mã QR
+                            </p>
+                          </div>
 
-                        {/* QR Code - To và rõ ràng, căn giữa hoàn hảo */}
-                        <div className="qr-code-container">
-                          <div className="qr-code-wrapper">
-                            <img
-                              src={qrCode}
-                              alt="VietQR"
-                              className="qr-code-image"
-                            />
+                          {/* QR Code */}
+                          <div className="qr-code-container">
+                            <div className="qr-code-wrapper">
+                              <div className="qr-code-border">
+                                <img
+                                  src={qrCode}
+                                  alt="VietQR"
+                                  className="qr-code-image"
+                                />
+                              </div>
+                              <div className="qr-code-corner qr-code-corner-tl"></div>
+                              <div className="qr-code-corner qr-code-corner-tr"></div>
+                              <div className="qr-code-corner qr-code-corner-bl"></div>
+                              <div className="qr-code-corner qr-code-corner-br"></div>
+                            </div>
                           </div>
-                        </div>
-                      </>
-                    )}
-
-                    {/* Payment Info - Chỉ hiển thị khi chưa có thông báo */}
-                    {!paymentMessage && (
-                      <div className="payment-info-container">
-                        <div className="payment-info-section">
-                          <div className="payment-info-label">
-                            <strong>Nội dung chuyển khoản:</strong>
-                          </div>
-                          <div className="payment-info-value">
-                            {transferContent}
-                          </div>
-                        </div>
-                        <div className="payment-info-section">
-                          <div className="payment-info-label">
-                            <strong>Số tiền cần thanh toán:</strong>
-                          </div>
-                          <div className="payment-info-amount">
-                            {formatPrice(amount)}
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <Badge bg={paymentStatus === "paid" ? "success" : paymentStatus === "pending" ? "warning" : "danger"} className="payment-status-badge">
-                            {paymentStatus === "paid" ? "✓ Đã thanh toán" : paymentStatus === "pending" ? "⏳ Đang chờ thanh toán" : "✗ Đơn hàng hủy"}
-                          </Badge>
                         </div>
 
-                        {/* Countdown timer */}
-                        {timeLeft > 0 && (
-                          <div className="countdown-timer">
-                            Thời gian còn lại: <strong>{Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}</strong>
+                        {/* Right Side - Payment Info */}
+                        <div className="qr-modal-right">
+                          <div className="payment-info-container">
+                          {/* Amount Section */}
+                          <div className="payment-amount-card">
+                            <div className="payment-amount-icon">
+                              <FaWallet />
+                            </div>
+                            <div className="payment-amount-content">
+                              <div className="payment-amount-label">Số tiền cần thanh toán</div>
+                              <div className="payment-amount-value">{formatPrice(amount)}</div>
+                            </div>
                           </div>
-                        )}
+
+                          {/* Transfer Content Section */}
+                          <div className="payment-transfer-card">
+                            <div className="payment-transfer-header">
+                              <div className="payment-transfer-icon">
+                                <FaMobileAlt />
+                              </div>
+                              <span className="payment-transfer-label">Nội dung chuyển khoản</span>
+                            </div>
+                            <div className="payment-transfer-content-wrapper">
+                              <div className="payment-transfer-content" id="transfer-content">
+                                {transferContent}
+                              </div>
+                              <button
+                                className="payment-transfer-copy-btn"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(transferContent);
+                                  const btn = document.querySelector('.payment-transfer-copy-btn');
+                                  if (btn) {
+                                    const originalText = btn.innerHTML;
+                                    btn.innerHTML = '<FaCheckCircle /> Đã sao chép!';
+                                    btn.style.background = '#28a745';
+                                    setTimeout(() => {
+                                      btn.innerHTML = originalText;
+                                      btn.style.background = '';
+                                    }, 2000);
+                                  }
+                                }}
+                                title="Sao chép nội dung chuyển khoản"
+                              >
+                                <FaCopy /> Sao chép
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Status Badge */}
+                          <div className="payment-status-wrapper">
+                            <Badge 
+                              bg={paymentStatus === "paid" ? "success" : paymentStatus === "pending" ? "warning" : "danger"} 
+                              className="payment-status-badge"
+                            >
+                              {paymentStatus === "paid" ? (
+                                <>
+                                  <FaCheckCircle className="me-2" />
+                                  Đã thanh toán
+                                </>
+                              ) : paymentStatus === "pending" ? (
+                                <>
+                                  <FaClock className="me-2" />
+                                  Đang chờ thanh toán
+                                </>
+                              ) : (
+                                <>
+                                  <FaTimesCircle className="me-2" />
+                                  Đơn hàng hủy
+                                </>
+                              )}
+                            </Badge>
+                          </div>
+
+                          {/* Countdown timer */}
+                          {timeLeft > 0 && (
+                            <div className="countdown-timer-card">
+                              <FaClock className="countdown-icon" />
+                              <div className="countdown-content">
+                                <div className="countdown-label">Thời gian còn lại</div>
+                                <div className="countdown-time">
+                                  {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </Card.Body>
@@ -1662,7 +1857,7 @@ export default function Checkout() {
                   <Col xs={12}>
                     <Form.Group className="mb-3">
                       <Form.Label>
-                        Phường/Xã <span style={{ color: '#FB6376' }}>*</span>
+                        Địa chỉ phụ <span style={{ color: '#FB6376' }}></span>
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -1676,7 +1871,7 @@ export default function Checkout() {
                   <Col md={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>
-                        Tỉnh <span style={{ color: '#FB6376' }}>*</span>
+                        Tỉnh/Thành phố <span style={{ color: '#FB6376' }}>*</span>
                       </Form.Label>
                       <Form.Control
                         type="text"
@@ -1691,7 +1886,7 @@ export default function Checkout() {
                   <Col md={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>
-                        Thành phố <span style={{ color: '#FB6376' }}>*</span>
+                        Phường/Xã <span style={{ color: '#FB6376' }}>*</span>
                       </Form.Label>
                       <Form.Control
                         type="text"

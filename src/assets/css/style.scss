@@ -28,6 +28,7 @@ $surface-2: rgba(255, 220, 204, 0.25);
 $border-1: rgba(93, 42, 66, 0.2);
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import '_product-detail-shopee';
 
 html {
     overflow-x: hidden;
@@ -2821,7 +2822,7 @@ p {
 // -------------------------------------- Profile Page
 .profile-container {
     min-height: calc(100vh - 120px);
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     padding: 2rem 1rem;

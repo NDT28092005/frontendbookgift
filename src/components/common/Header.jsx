@@ -14,6 +14,7 @@ const Header = () => {
     const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
     const [scrolled, setScrolled] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [avatarError, setAvatarError] = useState(false);
     
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
@@ -26,6 +27,11 @@ const Header = () => {
         window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
+
+    // Reset avatar error when user or avatar changes
+    useEffect(() => {
+        setAvatarError(false);
+    }, [user?.avatar]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -303,8 +309,45 @@ const Header = () => {
                                                 as="button" 
                                                 className="site-header__profile-btn"
                                                 id="user-profile-dropdown"
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    borderRadius: '50%',
+                                                    border: 'none',
+                                                    background: 'transparent',
+                                                    padding: 0,
+                                                    overflow: 'hidden',
+                                                    position: 'relative'
+                                                }}
                                             >
-                                                <FaUser className="profile-icon" />
+                                                {user.avatar && !avatarError ? (
+                                                    <img 
+                                                        src={`https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/storage/${user.avatar}`}
+                                                        alt={user.name || 'Avatar'}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            objectFit: 'cover',
+                                                            borderRadius: '50%',
+                                                            border: '2px solid rgba(251, 99, 118, 0.3)'
+                                                        }}
+                                                        onError={() => {
+                                                            // Set error state to show icon instead
+                                                            setAvatarError(true);
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <FaUser 
+                                                        className="profile-icon" 
+                                                        style={{
+                                                            fontSize: '1.2rem',
+                                                            color: '#FB6376'
+                                                        }}
+                                                    />
+                                                )}
                                             </Dropdown.Toggle>
                                             <Dropdown.Menu className="user-profile-menu">
                                                 <Dropdown.Item as="div" className="user-info">
