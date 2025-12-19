@@ -151,6 +151,42 @@ export default function AdminReturnRequests() {
     return new Date(date).toLocaleString('vi-VN');
   };
 
+  // Xác định loại hiển thị dựa trên payment_method
+  const getReturnTypeLabel = (returnReq) => {
+    const paymentMethod = returnReq.order?.payment_method;
+    
+    // Nếu là COD, hiển thị "Yêu cầu hủy"
+    if (paymentMethod === 'cod') {
+      return 'Yêu cầu hủy';
+    }
+    
+    // Nếu là bank_transfer hoặc momo, hiển thị "Hoàn tiền"
+    if (returnReq.type === 'refund') {
+      return 'Hoàn tiền';
+    }
+    
+    // Mặc định là "Đổi hàng"
+    return 'Đổi hàng';
+  };
+
+  // Xác định màu badge dựa trên loại
+  const getReturnTypeBadgeColor = (returnReq) => {
+    const paymentMethod = returnReq.order?.payment_method;
+    
+    // COD: màu warning (vàng) cho yêu cầu hủy
+    if (paymentMethod === 'cod') {
+      return 'warning';
+    }
+    
+    // Bank/Momo: màu danger (đỏ) cho hoàn tiền
+    if (returnReq.type === 'refund') {
+      return 'danger';
+    }
+    
+    // Mặc định: màu info (xanh) cho đổi hàng
+    return 'info';
+  };
+
   return (
     <AdminLayout>
       <div style={{ animation: 'fadeInUp 0.6s ease-out' }}>
@@ -220,8 +256,8 @@ export default function AdminReturnRequests() {
                       )}
                     </td>
                     <td style={{ padding: '1rem' }}>
-                      <Badge bg={returnReq.type === 'refund' ? 'danger' : 'info'}>
-                        {returnReq.type === 'refund' ? 'Hoàn tiền' : 'Đổi hàng'}
+                      <Badge bg={getReturnTypeBadgeColor(returnReq)}>
+                        {getReturnTypeLabel(returnReq)}
                       </Badge>
                     </td>
                     <td style={{ padding: '1rem', maxWidth: '200px' }}>
@@ -279,7 +315,7 @@ export default function AdminReturnRequests() {
                           </Button>
                         )}
 
-                        {returnReq.status === 'received' && returnReq.type === 'refund' && !returnReq.refund && (
+                        {returnReq.status === 'received' && returnReq.type === 'refund' && !returnReq.refund && returnReq.order?.payment_method !== 'cod' && (
                           <Button
                             variant="outline-success"
                             size="sm"
@@ -309,7 +345,7 @@ export default function AdminReturnRequests() {
             {selectedReturn && (
               <div>
                 <p><strong>Đơn hàng:</strong> #{selectedReturn.order_id}</p>
-                <p><strong>Loại:</strong> {selectedReturn.type === 'refund' ? 'Hoàn tiền' : 'Đổi hàng'}</p>
+                <p><strong>Loại:</strong> {getReturnTypeLabel(selectedReturn)}</p>
                 <p><strong>Lý do:</strong> {selectedReturn.reason}</p>
                 {selectedReturn.note && <p><strong>Ghi chú:</strong> {selectedReturn.note}</p>}
                 <p><strong>Trạng thái:</strong> {STATUS_LABELS[selectedReturn.status]}</p>

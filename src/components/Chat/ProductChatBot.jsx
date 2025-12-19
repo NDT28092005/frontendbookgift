@@ -899,11 +899,11 @@ export default function ProductChatBot({ onClose }) {
               🗑️
             </button>
           )}
-          {onClose && (
-            <button className="chatbot-close-btn" onClick={onClose}>
-              ✕
-            </button>
-          )}
+        {onClose && (
+          <button className="chatbot-close-btn" onClick={onClose}>
+            ✕
+          </button>
+        )}
         </div>
       </div>
 
@@ -937,20 +937,20 @@ export default function ProductChatBot({ onClose }) {
                             navigate(`/products/${product.id}`);
                           }}
                         >
-                          <div className="product-image">
-                            {product.image_url ? (
-                              <img src={product.image_url} alt={product.name} />
-                            ) : (
-                              <div className="product-placeholder">📦</div>
-                            )}
-                          </div>
-                          <div className="product-info">
-                            <h4>{product.name}</h4>
-                            {product.short_description && (
-                              <p className="product-short-description">
-                                {product.short_description}
-                              </p>
-                            )}
+                      <div className="product-image">
+                        {product.image_url ? (
+                          <img src={product.image_url} alt={product.name} />
+                        ) : (
+                          <div className="product-placeholder">📦</div>
+                        )}
+                      </div>
+                      <div className="product-info">
+                        <h4>{product.name}</h4>
+                        {product.short_description && (
+                          <p className="product-short-description">
+                            {product.short_description}
+                          </p>
+                        )}
                             {/* Rating */}
                             {(() => {
                               const rating = getProductRating(product.id);
@@ -972,20 +972,20 @@ export default function ProductChatBot({ onClose }) {
                               }
                               return null;
                             })()}
-                            <p className="product-price">
-                              {formatPrice(product.price)}
-                            </p>
-                            {product.stock_quantity > 0 ? (
-                              <span className="product-stock in-stock">
-                                Còn hàng
-                              </span>
-                            ) : (
-                              <span className="product-stock out-of-stock">
-                                Hết hàng
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                        <p className="product-price">
+                          {formatPrice(product.price)}
+                        </p>
+                        {product.stock_quantity > 0 ? (
+                          <span className="product-stock in-stock">
+                            Còn hàng
+                          </span>
+                        ) : (
+                          <span className="product-stock out-of-stock">
+                            Hết hàng
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
                         {/* Dịch vụ gói quà */}
                         {product.stock_quantity > 0 && giftOptions.wrappingPapers.length > 0 && (
