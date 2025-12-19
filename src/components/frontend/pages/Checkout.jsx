@@ -188,6 +188,57 @@ export default function Checkout() {
       setWrappingPapers(papersRes.data || []);
       setDecorativeAccessoriesList(accessoriesRes.data || []);
       setCardTypes(cardsRes.data || []);
+
+      // Load gift options từ localStorage (nếu có) - từ chatbot
+      const pendingGiftOptions = localStorage.getItem('pendingGiftOptions');
+      if (pendingGiftOptions) {
+        try {
+          const giftData = JSON.parse(pendingGiftOptions);
+          // Kiểm tra timestamp (chỉ dùng trong vòng 1 giờ)
+          const isRecent = giftData.timestamp && (Date.now() - giftData.timestamp < 3600000);
+          
+          if (isRecent && giftData) {
+            // Tìm và set wrapping paper
+            if (giftData.wrappingPaperId && papersRes.data) {
+              const paper = papersRes.data.find(p => p.id === giftData.wrappingPaperId);
+              if (paper) {
+                setWrappingPaperId(giftData.wrappingPaperId.toString());
+                setWrappingPaper(giftData.wrappingPaper || paper.name);
+                setWrappingPaperImage(paper.image_url || '');
+              }
+            }
+            
+            // Tìm và set decorative accessory
+            if (giftData.decorativeAccessoryId && accessoriesRes.data) {
+              const accessory = accessoriesRes.data.find(a => a.id === giftData.decorativeAccessoryId);
+              if (accessory) {
+                setDecorativeAccessoryId(giftData.decorativeAccessoryId.toString());
+                setDecorativeAccessories(giftData.decorativeAccessories || accessory.name);
+                setDecorativeAccessoryImage(accessory.image_url || '');
+              }
+            }
+            
+            // Tìm và set card type
+            if (giftData.cardTypeId && cardsRes.data) {
+              const card = cardsRes.data.find(c => c.id === giftData.cardTypeId);
+              if (card) {
+                setCardTypeId(giftData.cardTypeId.toString());
+                setCardType(giftData.cardType || card.name);
+                setCardTypeImage(card.image_url || '');
+              }
+            }
+
+            // Xóa sau khi đã load
+            localStorage.removeItem('pendingGiftOptions');
+          } else {
+            // Xóa nếu quá cũ
+            localStorage.removeItem('pendingGiftOptions');
+          }
+        } catch (err) {
+          console.error('Error loading pending gift options:', err);
+          localStorage.removeItem('pendingGiftOptions');
+        }
+      }
     } catch (error) {
       console.error('Error fetching gift options:', error);
       console.error('Error response:', error.response?.data);

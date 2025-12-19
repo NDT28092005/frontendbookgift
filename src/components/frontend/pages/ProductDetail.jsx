@@ -194,10 +194,6 @@ export default function ProductDetail() {
     }
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('vi-VN').format(price) + ' đ';
-  };
-
   // Facebook Share Functions
   const shareOnFacebook = () => {
     const url = encodeURIComponent(window.location.href);
@@ -433,6 +429,21 @@ export default function ProductDetail() {
                 )}
               </div>
 
+              {/* Short Description Section - Above Price */}
+              {product.short_description && (
+                <div className="product-short-description" style={{
+                  marginBottom: '1rem',
+                  padding: '0.75rem',
+                  background: 'rgba(0, 0, 0, 0.02)',
+                  borderRadius: '4px',
+                  fontSize: '0.875rem',
+                  color: 'rgba(0, 0, 0, 0.87)',
+                  lineHeight: '1.5'
+                }}>
+                  {product.short_description}
+                </div>
+              )}
+
               {/* Price Section - Shopee Style */}
               <div className="product-price-section">
                 <div className="current-price">
@@ -626,8 +637,6 @@ export default function ProductDetail() {
                   <div style={{ whiteSpace: 'pre-line' }}>
                     {product.full_description}
                   </div>
-                ) : product.short_description ? (
-                  <div>{product.short_description}</div>
                 ) : (
                   <p style={{ color: 'rgba(0, 0, 0, 0.54)' }}>
                     Không có thông tin chi tiết về sản phẩm này.
@@ -922,7 +931,7 @@ export default function ProductDetail() {
                     },
                     {
                       question: 'Chính sách giao hàng như thế nào?',
-                      answer: 'Chúng tôi giao hàng toàn quốc. Miễn phí vận chuyển cho đơn hàng từ 139.000đ. Đơn hàng dưới 139.000đ sẽ tính phí vận chuyển theo bảng giá của đơn vị vận chuyển.'
+                      answer: 'Chúng tôi giao hàng toàn quốc cho đơn hàng từ 139.000đ sẽ tính phí vận chuyển theo bảng giá của đơn vị vận chuyển.'
                     },
                     {
                       question: 'Có thể đổi trả sản phẩm không?',

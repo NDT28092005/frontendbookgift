@@ -36,3 +36,10 @@ export const getProductChatHistory = (conversationId) => {
   return axios.get(`${API_URL}/history/${conversationId}`, getAuthHeaders());
 };
 
+/**
+ * Xóa lịch sử chat
+ */
+export const clearProductChatHistory = () => {
+  return axios.delete(`${API_URL}/clear`, getAuthHeaders());
+};
+

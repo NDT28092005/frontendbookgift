@@ -391,12 +391,13 @@ const AdminOrders = () => {
               <table className="admin-table" style={{ borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
-                    <th>Order ID</th>
-                    <th>User Email</th>
-                    <th>Total Amount</th>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Total</th>
+                    <th>Payment</th>
                     <th>Status</th>
                     <th>Print Label</th>
-                    <th>Tracking Code</th>
+                    <th>Code</th>
                     <th>Created At</th>
                     <th>Actions</th>
                   </tr>
@@ -405,6 +406,25 @@ const AdminOrders = () => {
                   {orders.length > 0 ? (
                     orders.map((order) => {
                       const statusStyle = getStatusColor(order.status);
+                      const paymentMethod = order.payment_method || 'N/A';
+                      const getPaymentMethodLabel = (method) => {
+                        const labels = {
+                          'cod': 'COD',
+                          'bank_transfer': 'Chuyển khoản',
+                          'momo': 'Momo'
+                        };
+                        return labels[method] || method.toUpperCase();
+                      };
+                      const getPaymentMethodColor = (method) => {
+                        const colors = {
+                          'cod': { bg: 'rgba(255, 193, 7, 0.15)', color: '#ff9800' },
+                          'bank_transfer': { bg: 'rgba(0, 123, 255, 0.15)', color: '#007bff' },
+                          'momo': { bg: 'rgba(156, 39, 176, 0.15)', color: '#9c27b0' }
+                        };
+                        return colors[method] || { bg: 'rgba(108, 117, 125, 0.15)', color: '#6c757d' };
+                      };
+                      const paymentStyle = getPaymentMethodColor(paymentMethod);
+                      
                       return (
                         <tr key={order.id}>
                           <td style={{ fontWeight: '600' }}>{order.id}</td>
@@ -414,7 +434,18 @@ const AdminOrders = () => {
                           </td>
                           <td>
                             <span style={{
-                              padding: '0.25rem 0.75rem',
+                              borderRadius: '15px',
+                              fontSize: '0.85rem',
+                              padding: '4px 12px',
+                              background: paymentStyle.bg,
+                              color: paymentStyle.color,
+                              fontWeight: '600'
+                            }}>
+                              {getPaymentMethodLabel(paymentMethod)}
+                            </span>
+                          </td>
+                          <td>
+                            <span style={{
                               borderRadius: '15px',
                               fontSize: '0.85rem',
                               background: statusStyle.bg,
@@ -427,7 +458,6 @@ const AdminOrders = () => {
                           <td>
                             {order.print_label ? (
                               <span style={{
-                                padding: '0.25rem 0.75rem',
                                 borderRadius: '15px',
                                 fontSize: '0.85rem',
                                 background: 'rgba(0, 123, 255, 0.1)',
@@ -438,7 +468,6 @@ const AdminOrders = () => {
                               </span>
                             ) : (
                               <span style={{
-                                padding: '0.25rem 0.75rem',
                                 borderRadius: '15px',
                                 fontSize: '0.85rem',
                                 background: 'rgba(108, 117, 125, 0.1)',
@@ -452,7 +481,6 @@ const AdminOrders = () => {
                           <td>
                             {order.tracking_code ? (
                               <span style={{
-                                padding: '0.25rem 0.75rem',
                                 borderRadius: '15px',
                                 fontSize: '0.85rem',
                                 background: 'rgba(40, 167, 69, 0.1)',
@@ -486,8 +514,8 @@ const AdminOrders = () => {
                                 CHI TIẾT
                               </button>
                               
-                              {/* Nút Yêu cầu giao hàng */}
-                              {order.status === 'paid' && !order.tracking_code && (
+                              {/* Nút Yêu cầu giao hàng - Cho phép cả 'paid' và 'processing' (COD) */}
+                              {(order.status === 'paid' || order.status === 'processing') && !order.tracking_code && (
                                 <button
                                   onClick={() => handleCreateGhtkOrder(order.id)}
                                   disabled={creatingGhtk[order.id]}
@@ -511,7 +539,6 @@ const AdminOrders = () => {
                               
                               {order.tracking_code && (
                                 <span style={{
-                                  padding: '0.25rem 0.75rem',
                                   borderRadius: '15px',
                                   fontSize: '0.85rem',
                                   background: 'rgba(40, 167, 69, 0.1)',
@@ -642,7 +669,6 @@ const AdminOrders = () => {
                 <p style={{ marginBottom: '0.5rem', color: '#666' }}>
                   <strong style={{ color: '#5D2A42' }}>Trạng thái:</strong>{' '}
                   <span style={{
-                    padding: '0.25rem 0.75rem',
                     borderRadius: '15px',
                     fontSize: '0.85rem',
                     ...getStatusColor(selectedOrder.status),
@@ -655,7 +681,6 @@ const AdminOrders = () => {
                   <strong style={{ color: '#5D2A42' }}>Print Label:</strong>{' '}
                   {selectedOrder.print_label ? (
                     <span style={{
-                      padding: '0.25rem 0.75rem',
                       borderRadius: '15px',
                       fontSize: '0.85rem',
                       background: 'rgba(0, 123, 255, 0.1)',
@@ -666,7 +691,6 @@ const AdminOrders = () => {
                     </span>
                   ) : (
                     <span style={{
-                      padding: '0.25rem 0.75rem',
                       borderRadius: '15px',
                       fontSize: '0.85rem',
                       background: 'rgba(108, 117, 125, 0.1)',
@@ -681,7 +705,6 @@ const AdminOrders = () => {
                   <strong style={{ color: '#5D2A42' }}>Mã vận đơn:</strong>{' '}
                   {selectedOrder.tracking_code ? (
                     <span style={{
-                      padding: '0.25rem 0.75rem',
                       borderRadius: '15px',
                       fontSize: '0.85rem',
                       background: 'rgba(40, 167, 69, 0.1)',

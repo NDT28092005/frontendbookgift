@@ -99,3 +99,98 @@ export const createBotResponse = (category, products = []) => {
   };
 };
 
+/**
+ * Nhận diện ngân sách từ text (ví dụ: "dưới 500k", "500k-1tr", "khoảng 300k")
+ */
+export const detectBudget = (text) => {
+  if (!text) return null;
+  
+  const lowerText = text.toLowerCase().trim();
+  const budgetPatterns = [
+    { pattern: /dưới\s*(\d+)(\s*[kkt]|nghìn|ngàn)/i, type: 'max', multiplier: 1000 },
+    { pattern: /trên\s*(\d+)(\s*[kkt]|nghìn|ngàn)/i, type: 'min', multiplier: 1000 },
+    { pattern: /(\d+)\s*-\s*(\d+)(\s*[kkt]|nghìn|ngàn)/i, type: 'range', multiplier: 1000 },
+    { pattern: /khoảng\s*(\d+)(\s*[kkt]|nghìn|ngàn)/i, type: 'approx', multiplier: 1000 },
+    { pattern: /(\d+)(\s*[kkt]|nghìn|ngàn)/i, type: 'approx', multiplier: 1000 },
+    { pattern: /dưới\s*(\d+)\s*tr/i, type: 'max', multiplier: 1000000 },
+    { pattern: /trên\s*(\d+)\s*tr/i, type: 'min', multiplier: 1000000 },
+    { pattern: /(\d+)\s*-\s*(\d+)\s*tr/i, type: 'range', multiplier: 1000000 },
+    { pattern: /(\d+)\s*tr/i, type: 'approx', multiplier: 1000000 },
+  ];
+
+  for (const { pattern, type, multiplier } of budgetPatterns) {
+    const match = lowerText.match(pattern);
+    if (match) {
+      if (type === 'range') {
+        return {
+          min: parseInt(match[1]) * multiplier,
+          max: parseInt(match[2]) * multiplier,
+          type: 'range'
+        };
+      } else if (type === 'max') {
+        return {
+          max: parseInt(match[1]) * multiplier,
+          type: 'max'
+        };
+      } else if (type === 'min') {
+        return {
+          min: parseInt(match[1]) * multiplier,
+          type: 'min'
+        };
+      } else if (type === 'approx') {
+        const value = parseInt(match[1]) * multiplier;
+        return {
+          min: value * 0.8,
+          max: value * 1.2,
+          type: 'approx'
+        };
+      }
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Tìm kiếm sản phẩm theo tên/từ khóa
+ */
+export const searchProductsByName = (text, products = []) => {
+  if (!text || !products.length) return [];
+  
+  const lowerText = text.toLowerCase().trim();
+  const keywords = lowerText.split(/\s+/).filter(word => word.length > 1);
+  
+  return products.filter(product => {
+    const productName = (product.name || '').toLowerCase();
+    const shortDesc = (product.short_description || '').toLowerCase();
+    
+    // Kiểm tra từng keyword
+    return keywords.some(keyword => 
+      productName.includes(keyword) || shortDesc.includes(keyword)
+    );
+  });
+};
+
+/**
+ * Lọc sản phẩm theo ngân sách
+ */
+export const filterProductsByBudget = (products = [], budget) => {
+  if (!budget || !products.length) return products;
+  
+  return products.filter(product => {
+    const price = parseFloat(product.price) || 0;
+    
+    if (budget.type === 'range') {
+      return price >= budget.min && price <= budget.max;
+    } else if (budget.type === 'max') {
+      return price <= budget.max;
+    } else if (budget.type === 'min') {
+      return price >= budget.min;
+    } else if (budget.type === 'approx') {
+      return price >= budget.min && price <= budget.max;
+    }
+    
+    return true;
+  });
+};
+
