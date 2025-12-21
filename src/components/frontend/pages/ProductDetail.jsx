@@ -67,17 +67,18 @@ export default function ProductDetail() {
   const [addingToCart, setAddingToCart] = useState(false);
 
   // SEO & Open Graph Meta Tags for Facebook sharing
+  // Update when product or reviews change
   useEffect(() => {
     if (product) {
       const currentUrl = window.location.href;
-      setProductMetaTags(product, currentUrl);
+      setProductMetaTags(product, currentUrl, reviews);
     }
     
     // Cleanup: clear product-specific tags when component unmounts
     return () => {
       clearProductMetaTags();
     };
-  }, [product]);
+  }, [product, reviews]);
 
   useEffect(() => {
     const fetchProduct = async () => {
