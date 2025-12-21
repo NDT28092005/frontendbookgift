@@ -251,16 +251,20 @@ export default function ProductDetail() {
 
   // Facebook Share Functions
   const shareOnFacebook = () => {
-    const url = encodeURIComponent(window.location.href);
-    const quote = encodeURIComponent(`${product.name} - ${product.short_description || ''}`);
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`;
+    // Sử dụng URL backend share để Facebook crawler có thể đọc meta tags
+    const backendShareUrl = `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/share/product/${id}`;
+    const url = encodeURIComponent(backendShareUrl);
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
   const shareOnMessenger = () => {
-    const url = encodeURIComponent(window.location.href);
+    // Sử dụng URL backend share để Facebook crawler có thể đọc meta tags
+    const backendShareUrl = `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/share/product/${id}`;
+    const url = encodeURIComponent(backendShareUrl);
+    const frontendUrl = window.location.href;
     // Use Facebook Send Dialog for sharing via Messenger
-    const shareUrl = `https://www.facebook.com/dialog/send?link=${url}&redirect_uri=${encodeURIComponent(window.location.href)}`;
+    const shareUrl = `https://www.facebook.com/dialog/send?link=${url}&redirect_uri=${encodeURIComponent(frontendUrl)}`;
     // For mobile devices, try to use messenger app
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       // Try to open in Messenger app first, fallback to web
