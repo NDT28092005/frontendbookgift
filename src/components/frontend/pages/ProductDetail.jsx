@@ -65,75 +65,20 @@ export default function ProductDetail() {
   const [reviewSort, setReviewSort] = useState('latest');
   const [addingToCart, setAddingToCart] = useState(false);
 
-  // Helper function to set or update meta tag
-  const setMetaTag = (property, content) => {
-    let meta = document.querySelector(`meta[property="${property}"]`) || 
-               document.querySelector(`meta[name="${property}"]`);
-    
-    if (!meta) {
-      meta = document.createElement('meta');
-      if (property.startsWith('og:') || property.startsWith('product:')) {
-        meta.setAttribute('property', property);
-      } else {
-        meta.setAttribute('name', property);
-      }
-      document.getElementsByTagName('head')[0].appendChild(meta);
-    }
-    
-    meta.setAttribute('content', content);
-  };
-
-  // Helper function to get absolute image URL
-  const getAbsoluteImageUrl = (imageUrl) => {
-    if (!imageUrl) return '';
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
-    }
-    // If relative URL, prepend API base URL
-    if (imageUrl.startsWith('/')) {
-      return `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net${imageUrl}`;
-    }
-    return imageUrl;
-  };
-
-  // SEO & Open Graph Meta Tags
+  // SEO Meta Tags
   useEffect(() => {
     if (product) {
-      const currentUrl = window.location.href;
+      document.title = `${product.name} - Cửa hàng quà tặng`;
+      const metaDescription = document.querySelector('meta[name="description"]');
       const description = product.short_description || product.full_description || `Khám phá ${product.name} - món quà tặng ý nghĩa và chất lượng cao.`;
-      
-      // Get product image - use first image or placeholder
-      const productImage = product.images && product.images.length > 0 
-        ? product.images[0].image_url 
-        : 'https://via.placeholder.com/1200x630?text=Bloom+%26+Box';
-      const absoluteImageUrl = getAbsoluteImageUrl(productImage);
-      
-      // Basic SEO Meta Tags
-      document.title = `${product.name} - Bloom & Box`;
-      setMetaTag('description', description);
-      
-      // Open Graph Meta Tags for Facebook
-      setMetaTag('og:type', 'product');
-      setMetaTag('og:title', `${product.name} - Bloom & Box`);
-      setMetaTag('og:description', description);
-      setMetaTag('og:image', absoluteImageUrl);
-      setMetaTag('og:image:width', '1200');
-      setMetaTag('og:image:height', '630');
-      setMetaTag('og:image:alt', product.name);
-      setMetaTag('og:url', currentUrl);
-      setMetaTag('og:site_name', 'Bloom & Box');
-      setMetaTag('og:locale', 'vi_VN');
-      
-      // Product-specific Open Graph tags
-      setMetaTag('product:price:amount', product.price);
-      setMetaTag('product:price:currency', 'VND');
-      setMetaTag('product:availability', 'in stock');
-      
-      // Twitter Card Meta Tags (bonus)
-      setMetaTag('twitter:card', 'summary_large_image');
-      setMetaTag('twitter:title', `${product.name} - Bloom & Box`);
-      setMetaTag('twitter:description', description);
-      setMetaTag('twitter:image', absoluteImageUrl);
+      if (metaDescription) {
+        metaDescription.setAttribute('content', description);
+      } else {
+        const meta = document.createElement('meta');
+        meta.name = 'description';
+        meta.content = description;
+        document.getElementsByTagName('head')[0].appendChild(meta);
+      }
     }
   }, [product]);
 
@@ -251,20 +196,16 @@ export default function ProductDetail() {
 
   // Facebook Share Functions
   const shareOnFacebook = () => {
-    // Sử dụng URL backend share để Facebook crawler có thể đọc meta tags
-    const backendShareUrl = `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/share/product/${id}`;
-    const url = encodeURIComponent(backendShareUrl);
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    const url = encodeURIComponent(window.location.href);
+    const quote = encodeURIComponent(`${product.name} - ${product.short_description || ''}`);
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`;
     window.open(shareUrl, '_blank', 'width=600,height=400');
   };
 
   const shareOnMessenger = () => {
-    // Sử dụng URL backend share để Facebook crawler có thể đọc meta tags
-    const backendShareUrl = `https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net/share/product/${id}`;
-    const url = encodeURIComponent(backendShareUrl);
-    const frontendUrl = window.location.href;
+    const url = encodeURIComponent(window.location.href);
     // Use Facebook Send Dialog for sharing via Messenger
-    const shareUrl = `https://www.facebook.com/dialog/send?link=${url}&redirect_uri=${encodeURIComponent(frontendUrl)}`;
+    const shareUrl = `https://www.facebook.com/dialog/send?link=${url}&redirect_uri=${encodeURIComponent(window.location.href)}`;
     // For mobile devices, try to use messenger app
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       // Try to open in Messenger app first, fallback to web
