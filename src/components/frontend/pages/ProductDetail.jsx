@@ -13,6 +13,7 @@ import Badge from 'react-bootstrap/Badge';
 import Form from 'react-bootstrap/Form';
 import { FaShoppingCart, FaStar, FaArrowLeft, FaUser, FaFacebook, FaFacebookMessenger } from 'react-icons/fa';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { setProductMetaTags, clearProductMetaTags } from '../../../utils/metaTags';
 
 // Component hiển thị sao đánh giá
 const StarRating = ({ rating, onRatingChange, readonly = false, size = '1.2rem' }) => {
@@ -65,21 +66,17 @@ export default function ProductDetail() {
   const [reviewSort, setReviewSort] = useState('latest');
   const [addingToCart, setAddingToCart] = useState(false);
 
-  // SEO Meta Tags
+  // SEO & Open Graph Meta Tags for Facebook sharing
   useEffect(() => {
     if (product) {
-      document.title = `${product.name} - Cửa hàng quà tặng`;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      const description = product.short_description || product.full_description || `Khám phá ${product.name} - món quà tặng ý nghĩa và chất lượng cao.`;
-      if (metaDescription) {
-        metaDescription.setAttribute('content', description);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = description;
-        document.getElementsByTagName('head')[0].appendChild(meta);
-      }
+      const currentUrl = window.location.href;
+      setProductMetaTags(product, currentUrl);
     }
+    
+    // Cleanup: clear product-specific tags when component unmounts
+    return () => {
+      clearProductMetaTags();
+    };
   }, [product]);
 
   useEffect(() => {
