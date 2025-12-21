@@ -193,28 +193,36 @@ export default function ProductDetail() {
   };
 
   // Facebook Share Functions
+  // Use backend share URL so Facebook crawler can read meta tags
+  const getShareUrl = () => {
+    const backendBaseUrl = 'https://bebookgift-hugmbshcgaa0b4d6.eastasia-01.azurewebsites.net';
+    return `${backendBaseUrl}/products/${id}/share`;
+  };
+
   const shareOnFacebook = () => {
-    const url = encodeURIComponent(window.location.href);
+    const shareUrl = getShareUrl();
+    const url = encodeURIComponent(shareUrl);
     const quote = encodeURIComponent(`${product.name} - ${product.short_description || ''}`);
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`;
-    window.open(shareUrl, '_blank', 'width=600,height=400');
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`;
+    window.open(facebookShareUrl, '_blank', 'width=600,height=400');
   };
 
   const shareOnMessenger = () => {
-    const url = encodeURIComponent(window.location.href);
+    const shareUrl = getShareUrl();
+    const url = encodeURIComponent(shareUrl);
     // Use Facebook Send Dialog for sharing via Messenger
-    const shareUrl = `https://www.facebook.com/dialog/send?link=${url}&redirect_uri=${encodeURIComponent(window.location.href)}`;
+    const messengerShareUrl = `https://www.facebook.com/dialog/send?link=${url}&redirect_uri=${encodeURIComponent(shareUrl)}`;
     // For mobile devices, try to use messenger app
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
       // Try to open in Messenger app first, fallback to web
-      const messengerUrl = `fb-messenger://share?link=${url}`;
-      window.location.href = messengerUrl;
+      const messengerAppUrl = `fb-messenger://share?link=${url}`;
+      window.location.href = messengerAppUrl;
       // Fallback after a short delay if app doesn't open
       setTimeout(() => {
-        window.open(shareUrl, '_blank', 'width=600,height=400');
+        window.open(messengerShareUrl, '_blank', 'width=600,height=400');
       }, 500);
     } else {
-      window.open(shareUrl, '_blank', 'width=600,height=400');
+      window.open(messengerShareUrl, '_blank', 'width=600,height=400');
     }
   };
 
